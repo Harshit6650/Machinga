@@ -17,7 +17,9 @@
     <!-- Loading Screen -->
     <div id="loader-screen" class="loader-screen">
         <div class="loader-content">
-            <h2 class="loader-text">Loading Experience</h2>
+            <h2 class="loader-heading">The Machinga Method</h2>
+            <p class="loader-subtext">Think clearly. Make decisively. Run smart.</p>
+            <p class="loader-scroll-text">Scroll down to begin.</p>
             <div class="loader-bar-bg">
                 <div class="loader-bar" id="loader-progress"></div>
             </div>
@@ -40,8 +42,8 @@
     <!-- Canvas Hero Scroll Section -->
     <section class="hero-scroll-section" id="hero-scroll">
         <div class="canvas-container">
-            <div class="speed-lines-bg"></div>
             <canvas id="hero-canvas"></canvas>
+            <canvas id="wind-overlay" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;"></canvas>
         </div>
     </section>
 
