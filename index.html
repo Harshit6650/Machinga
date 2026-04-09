@@ -4,22 +4,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Machinga</title>
-    <!-- Google Fonts -->
+    <title>Machinga — The Machinga Method</title>
+    <meta name="description" content="Think clearly. Make decisively. Run smart. Machinga helps you move from scattered idea to running system.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
+
     <!-- Loading Screen -->
     <div id="loader-screen" class="loader-screen">
         <div class="loader-content">
             <h2 class="loader-heading">The Machinga Method</h2>
             <p class="loader-subtext">Think clearly. Make decisively. Run smart.</p>
-            <p class="loader-scroll-text">Scroll down to begin.</p>
             <div class="loader-bar-bg">
                 <div class="loader-bar" id="loader-progress"></div>
             </div>
@@ -27,7 +26,7 @@
         </div>
     </div>
 
-    <!-- 1. Header/Nav -->
+    <!-- Header/Nav -->
     <header class="site-header">
         <div class="logo">Machinga</div>
         <nav class="desktop-nav">
@@ -39,30 +38,62 @@
         </nav>
     </header>
 
-    <!-- Canvas Hero Scroll Section -->
-    <section class="hero-scroll-section" id="hero-scroll">
-        <div class="canvas-container">
-            <canvas id="hero-canvas"></canvas>
-            <canvas id="wind-overlay" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;"></canvas>
+    <!-- ═══════════════════════════════════════
+         CANVAS SCROLL SECTION
+         ═══════════════════════════════════════ -->
+    <section id="video-section" class="video-section">
+
+        <!-- Image sequence canvas -->
+        <canvas id="hero-canvas"></canvas>
+
+        <!-- Wind overlay canvas -->
+        <canvas id="wind-canvas"></canvas>
+
+        <!-- Progress rail (right) — dots are clickable -->
+        <div id="progress-rail"></div>
+
+        <!-- Chapter label (bottom-left) -->
+        <div id="chapter-label"></div>
+
+        <!-- Green pulse dots (left — shown during loop/pause) -->
+        <div id="dwell-indicator">
+            <div class="dwell-dot"></div>
+            <div class="dwell-dot"></div>
+            <div class="dwell-dot"></div>
         </div>
+
+        <!-- Scroll progress bar (bottom) -->
+        <div id="continue-wrap">
+            <div id="continue-inner">
+                <span id="continue-label">Scroll to continue</span>
+                <div id="continue-track"><div id="continue-fill"></div></div>
+                <span id="continue-arrow">↓</span>
+            </div>
+        </div>
+
+        <!-- Transition label (top-right) -->
+        <div id="transition-label"></div>
+
+        <!-- Global video progress bar (very bottom edge) -->
+        <div id="progress-bar-wrap">
+            <div id="progress-bar-fill"></div>
+        </div>
+
     </section>
 
-    <!-- 2. Services Marquee -->
+    <!-- Services Marquee -->
     <section class="marquee-section" id="home">
         <div class="marquee-content">
-            <!-- Need to repeat items so it scrolls smoothly -->
-            <span>Content Strategy • Creative Direction • Video Production • Social Media • Campaign Development • Brand
-                Strategy • AI Filmmaking •</span>
-            <span>Content Strategy • Creative Direction • Video Production • Social Media • Campaign Development • Brand
-                Strategy • AI Filmmaking •</span>
+            <span>Content Strategy • Creative Direction • Video Production • Social Media • Campaign Development • Brand Strategy • AI Filmmaking •</span>
+            <span>Content Strategy • Creative Direction • Video Production • Social Media • Campaign Development • Brand Strategy • AI Filmmaking •</span>
         </div>
     </section>
 
-    <!-- 3. "Work" (Portfolio Showcase) -->
+    <!-- Work Section -->
     <section class="work-section" id="work">
         <div class="work-grid">
             <div class="work-item">
-                <img src="./assets/appreciate.png" alt="Appreciate Background" class="bg-layer">
+                <img src="./assets/appreciate.png" alt="Appreciate" class="bg-layer">
                 <div class="work-content">
                     <h2>0 → 124K</h2>
                     <p class="work-title">Appreciate</p>
@@ -70,7 +101,7 @@
                 </div>
             </div>
             <div class="work-item">
-                <img src="./assets/contraband.png" alt="Contraband Background" class="bg-layer">
+                <img src="./assets/contraband.png" alt="Contraband" class="bg-layer">
                 <div class="work-content">
                     <h2>50M views. 2 weeks. No celebrity</h2>
                     <p class="work-title">Contraband</p>
@@ -78,7 +109,7 @@
                 </div>
             </div>
             <div class="work-item wide">
-                <img src="./assets/aava.png" alt="Aava Background" class="bg-layer">
+                <img src="./assets/aava.png" alt="Aava" class="bg-layer">
                 <div class="work-content">
                     <h2>Born Alkaline. Uncopyable.</h2>
                     <p class="work-title">Aava</p>
@@ -86,7 +117,7 @@
                 </div>
             </div>
             <div class="work-item wide">
-                <img src="./assets/hamleys.png" alt="Hamleys Background" class="bg-layer">
+                <img src="./assets/hamleys.png" alt="Hamleys" class="bg-layer">
                 <div class="work-content">
                     <h2>Umang hai toh hai.</h2>
                     <p class="work-title">Hamleys</p>
@@ -96,25 +127,21 @@
         </div>
     </section>
 
-    <!-- 4. Statement Segment -->
+    <!-- Statement -->
     <section class="statement-section">
         <div class="container">
             <h2>Earn attention with compound interest.</h2>
-            <p>Most content fails because nobody thought about it. We figure out what your brand should say, the insight
-                that makes you uncopyable then build the system say it. Again and again.</p>
+            <p>Most content fails because nobody thought about it. We figure out what your brand should say, the insight that makes you uncopyable then build the system say it. Again and again.</p>
         </div>
     </section>
 
-    <!-- 5. Services and Pricing Cards ("How we work") -->
+    <!-- Pricing -->
     <section class="pricing-section" id="how-we-work">
         <div class="container pricing-grid">
-
             <div class="pricing-card primary-card">
                 <h3>Content Engine</h3>
                 <h4>Think. Make. Run. All of it.</h4>
-                <p class="desc">Full-service creative partnership. We develop your content strategy, embed a dedicated
-                    team, and run your content operation. You get an in-house creative department without building one.
-                </p>
+                <p class="desc">Full-service creative partnership. We develop your content strategy, embed a dedicated team, and run your content operation. You get an in-house creative department without building one.</p>
                 <ul class="features">
                     <li>Dedicated team & strategy</li>
                     <li>Ongoing production</li>
@@ -125,13 +152,10 @@
                     <span class="price">₹4L<span>/month</span></span>
                 </div>
             </div>
-
             <div class="pricing-card">
                 <h3>Creative Strategy</h3>
                 <h4>We Think. You make. We guide</h4>
-                <p class="desc">Strategic direction without full execution. We develop your content strategy, create
-                    concepts and scripts, and provide creative oversight—you or your team handles production. Get our
-                    thinking without our production costs.</p>
+                <p class="desc">Strategic direction without full execution. We develop your content strategy, create concepts and scripts, and provide creative oversight—you or your team handles production.</p>
                 <ul class="features">
                     <li>Content strategy & concept</li>
                     <li>Scripts & briefs</li>
@@ -142,13 +166,10 @@
                     <span class="price">₹1.5L<span>/month</span></span>
                 </div>
             </div>
-
             <div class="pricing-card">
                 <h3>Campaign / Project</h3>
                 <h4>Think. Make. Ship.</h4>
-                <p class="desc">One-off creative work. Campaign concepts, brand films, launch content,
-                    repositioning—defined scope, clear deliverables, fixed timeline. When you need something specific
-                    done well.</p>
+                <p class="desc">One-off creative work. Campaign concepts, brand films, launch content, repositioning—defined scope, clear deliverables, fixed timeline.</p>
                 <ul class="features">
                     <li>Defined scope & timeline</li>
                     <li>Creative development</li>
@@ -159,11 +180,10 @@
                     <span class="price">₹5L<span>/month</span></span>
                 </div>
             </div>
-
         </div>
     </section>
 
-    <!-- 6. About the Name -->
+    <!-- About -->
     <section class="about-section" id="about">
         <div class="container about-grid">
             <div class="about-title-col">
@@ -171,44 +191,27 @@
                 <p class="pronunciation">/muh - chin - gah/</p>
             </div>
             <div class="about-text-col">
-                <p class="definition">A palm-sized coconut fruit used to make innovative handmade toys for kids of all
-                    ages. Crudely translated from Malayalam.</p>
-                <p class="explanation">We liked the word. It's playful. It's crafted. It's distinctly Indian. It makes
-                    people ask, "What does that mean?" And then we get to tell them.</p>
+                <p class="definition">A palm-sized coconut fruit used to make innovative handmade toys for kids of all ages. Crudely translated from Malayalam.</p>
+                <p class="explanation">We liked the word. It's playful. It's crafted. It's distinctly Indian. It makes people ask, "What does that mean?" And then we get to tell them.</p>
             </div>
         </div>
     </section>
 
-    <!-- 7. Core Beliefs Section -->
+    <!-- Beliefs -->
     <section class="beliefs-section">
         <div class="container">
             <h3 class="section-label">things we believe to be true</h3>
             <div class="beliefs-list">
-                <div class="belief-item">
-                    <span class="tag">CHALLENGES</span>
-                    <p>Strategy isn't a phase you rush through. It's the reason everything else works.</p>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">CHALLENGES</span>
-                    <p>Content should be an engine, not a slot machine. Systems beat one-offs.</p>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">CHALLENGES</span>
-                    <p>The best creative comes from understanding, not guessing. Do the homework.</p>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">CHALLENGES</span>
-                    <p>If it doesn't make people feel something, it won't make them do anything.</p>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">CHALLENGES</span>
-                    <p>Compound interest works for attention too. Show up consistently.</p>
-                </div>
+                <div class="belief-item"><span class="tag">CHALLENGES</span><p>Strategy isn't a phase you rush through. It's the reason everything else works.</p></div>
+                <div class="belief-item"><span class="tag">CHALLENGES</span><p>Content should be an engine, not a slot machine. Systems beat one-offs.</p></div>
+                <div class="belief-item"><span class="tag">CHALLENGES</span><p>The best creative comes from understanding, not guessing. Do the homework.</p></div>
+                <div class="belief-item"><span class="tag">CHALLENGES</span><p>If it doesn't make people feel something, it won't make them do anything.</p></div>
+                <div class="belief-item"><span class="tag">CHALLENGES</span><p>Compound interest works for attention too. Show up consistently.</p></div>
             </div>
         </div>
     </section>
 
-    <!-- 8. Contact & Footer -->
+    <!-- Contact -->
     <section class="contact-section" id="contact">
         <div class="container contact-content">
             <h2 class="huge-text">Let's make <br />something</h2>
@@ -221,9 +224,7 @@
 
     <footer class="site-footer">
         <div class="container footer-grid">
-            <div class="footer-brand">
-                <h4>Think. Make. Run.</h4>
-            </div>
+            <div class="footer-brand"><h4>Think. Make. Run.</h4></div>
             <div class="footer-links">
                 <a href="#work">Work</a>
                 <a href="#how-we-work">How we work</a>
@@ -241,17 +242,6 @@
         </div>
     </footer>
 
-    <!-- Video UI Overlays -->
-    <div id="video-progress-bar" class="video-progress-bar"></div>
-    <div id="video-dots" class="video-dots-container">
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
-        <span class="dot"></span>
-    </div>
-
-    <!-- Custom JS -->
     <script src="./js/main.js"></script>
 </body>
-
 </html>
