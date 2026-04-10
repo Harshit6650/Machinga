@@ -133,12 +133,13 @@ function onAllLoaded() {
 for (let i = 0; i < FRAME_COUNT; i++) {
     const img  = new Image();
     const name = String(i + 1).padStart(5, '0');
+    // Important: GitHub Pages is Case-Sensitive! The folder on disk is PencilBombFrames
     img.onload = img.onerror = () => {
         loadedCount++;
         setLoaderProgress((loadedCount / FRAME_COUNT) * 100);
         if (loadedCount === FRAME_COUNT) onAllLoaded();
     };
-    img.src   = `./assets/pencilbombframes/${name}.webp`;
+    img.src   = `./assets/PencilBombFrames/${name}.webp`;
     images[i] = img;
 }
 
