@@ -356,10 +356,24 @@ function retreatState() {
     }, ms);
 }
 
-function enterVideoMode() {
+function enterVideoMode(fromBottom = false) {
     if (videoModeActive) return;
     if (!allLoaded) return;
-    showScrollToBegin();
+    
+    if (fromBottom) {
+        videoModeActive = true;
+        waitingForFirstScroll = false;
+        isReversing = false;
+
+        document.body.style.overflow = 'hidden';
+        videoSection.scrollIntoView({ behavior: 'instant' });
+
+        // Target the last valid interactive state before exit (the final pause or loop)
+        stateIdx = STATES.length - 2;
+        loadState(stateIdx);
+    } else {
+        showScrollToBegin();
+    }
 }
 
 function exitVideoMode() {
@@ -488,7 +502,9 @@ window.addEventListener('keydown', (e) => {
 const videoObserver = new IntersectionObserver((entries) => {
     for (const entry of entries) {
         if (entry.isIntersecting && entry.intersectionRatio >= 0.45 && !videoModeActive && allLoaded) {
-            enterVideoMode();
+            // Check if top of section is above the viewport (meaning we scrolled up from below it)
+            const fromBottom = entry.boundingClientRect.top < 0;
+            enterVideoMode(fromBottom);
         }
     }
 }, { threshold: 0.45 });
