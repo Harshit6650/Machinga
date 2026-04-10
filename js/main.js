@@ -57,14 +57,28 @@ const loaderVideo  = document.querySelector('.loader-video');
 
 function startImagePreload() {
     if (images[0]) return; // Guard against multiple calls
+    
+    // Absolute failsafe: No matter what happens with the network, lift the loader screen after 12 seconds.
+    setTimeout(() => { if (!allLoaded) onAllLoaded(); }, 12000);
+
     for (let i = 0; i < FRAME_COUNT; i++) {
         const img  = new Image();
         const name = String(i + 1).padStart(5, '0');
         // Important: GitHub Pages is Case-Sensitive! The folder on disk is PencilBombFrames
         img.onload = img.onerror = () => {
             loadedCount++;
+            
+            // Calculate progress (visual only)
             setLoaderProgress((loadedCount / FRAME_COUNT) * 100);
-            if (loadedCount === FRAME_COUNT) onAllLoaded();
+            
+            // Safety: As soon as the first 75 frames are loaded safely, unlock the screen
+            // so the user isn't stuck waiting for 1079 requests on basic networks.
+            if (!allLoaded && loadedCount >= 75 && images[0] && images[0].complete) {
+                onAllLoaded();
+            } else if (!allLoaded && loadedCount === FRAME_COUNT) {
+                 // Failsafe if we somehow reach the end
+                 onAllLoaded();
+            }
         };
         img.src   = `./assets/PencilBombFrames/${name}.webp`;
         images[i] = img;
@@ -107,9 +121,19 @@ function renderFrame(idx) {
     idx = Math.max(0, Math.min(FRAME_COUNT - 1, Math.floor(idx)));
     currentDisplayFrame = idx;
 
-    const img = images[idx];
-    if (!img || !img.complete || !img.naturalWidth) return;
+    // Graceful Network Degradation: 
+    // Search backward to find the absolute most recently loaded frame.
+    // This entirely prevents the canvas "blanking out" if a user scrolls faster 
+    // than their network can download the large high-res sequence.
+    let searchIdx = idx;
+    while(searchIdx >= 0 && (!images[searchIdx] || !images[searchIdx].complete || !images[searchIdx].naturalWidth)) {
+        searchIdx--;
+    }
+    
+    // Nothing loaded yet
+    if (searchIdx < 0) return; 
 
+    const img = images[searchIdx];
     const cw = canvas.width,  ch = canvas.height;
     const iw = img.naturalWidth, ih = img.naturalHeight;
 
@@ -143,8 +167,16 @@ function setLoaderProgress(pct) {
 }
 
 function onAllLoaded() {
+    if (allLoaded) return;
+    
+    // Safety check to ensure we don't unlock entirely blind.
+    // If the first frame is still loading, wait. If it erred, it'll pass this so no deadlock.
+    if (!images[0] || !images[0].complete) {
+        setTimeout(onAllLoaded, 100);
+        return;
+    }
+    
     allLoaded = true;
-    setLoaderProgress(100);
 
     // Set canvas to viewport size before first render
     resizeCanvas();
