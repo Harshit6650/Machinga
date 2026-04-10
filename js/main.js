@@ -52,6 +52,12 @@ const loaderBar    = document.getElementById('loader-progress');
 const loaderPct    = document.getElementById('loader-percentage');
 const siteHeader   = document.querySelector('.site-header');
 
+// Explicitly force loader video to play for harsh mobile browsers
+const loaderVideo  = document.querySelector('.loader-video');
+if (loaderVideo) {
+    loaderVideo.play().catch(e => console.warn('Autoplay blocked:', e));
+}
+
 // ══════════════════════════════════════════════════════════════════════════════
 //  RESPONSIVE CANVAS — contain-scale to any screen
 // ══════════════════════════════════════════════════════════════════════════════

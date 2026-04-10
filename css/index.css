@@ -329,13 +329,12 @@ body {
 .loader-content { width: 80%; max-width: 600px; text-align: center; position: relative; z-index: 2; pointer-events: none; }
 .loader-video    { 
     position: absolute; 
-    top: 80px; 
+    top: 0; 
     left: 0; 
-    width: 100vw; 
-    height: calc(100vh - 80px); 
+    width: 100%; 
+    height: 100%; 
     object-fit: contain; 
-    z-index: 1; 
-    mix-blend-mode: multiply; 
+    z-index: 1;
     pointer-events: none;
 }
 .loader-heading  { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; letter-spacing: -1px; }
