@@ -11,7 +11,7 @@
 // ══════════════════════════════════════════════════════════════════════════════
 
 const FPS         = 24;
-const FRAME_COUNT = 1078;
+const FRAME_COUNT = 1079;
 
 function t2f(sec) {
     return Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(sec * FPS) - 1));
@@ -20,15 +20,15 @@ function t2f(sec) {
 // ── State Machine definition ──────────────────────────────────────────────────
 const STATES = [
     { type: 'play-once', startF: t2f(0.0),  endF: t2f(5.4),   triggerPx: 70,  greenPulse: false, label: null },
-    { type: 'transition',startF: t2f(5.4),  endF: t2f(10.5),  fps: FPS, label: 'Expanding' },
+    { type: 'transition',startF: t2f(5.4),  endF: t2f(10.5),  fps: Math.round(FPS * 1.6), label: 'Expanding' },
     { type: 'loop',      startF: t2f(10.5), endF: t2f(13.93), triggerPx: 200, greenPulse: true,  label: 'Think' },
-    { type: 'transition',startF: t2f(13.93),endF: t2f(17.0),  fps: FPS, label: '' },
+    { type: 'transition',startF: t2f(13.93),endF: t2f(17.0),  fps: Math.round(FPS * 1.6), label: '' },
     { type: 'loop',      startF: t2f(17.0), endF: t2f(19.30), triggerPx: 200, greenPulse: true,  label: 'Make' },
-    { type: 'transition',startF: t2f(19.30),endF: t2f(24.88), fps: FPS, label: '' },
+    { type: 'transition',startF: t2f(19.30),endF: t2f(24.88), fps: Math.round(FPS * 1.6), label: '' },
     { type: 'loop',      startF: t2f(24.88),endF: t2f(26.93), triggerPx: 200, greenPulse: true,  label: 'Run' },
-    { type: 'transition',startF: t2f(26.93),endF: t2f(29.5),  fps: FPS, label: '' },
+    { type: 'transition',startF: t2f(26.93),endF: t2f(29.5),  fps: Math.round(FPS * 1.6), label: '' },
     { type: 'pause',     holdF:  t2f(30.0), triggerPx: 350,   greenPulse: false, label: 'Think · Make · Run' },
-    { type: 'transition',startF: t2f(30.0), endF: t2f(43.0),  fps: FPS, label: 'The Machinga Method' },
+    { type: 'transition',startF: t2f(30.0), endF: t2f(43.0),  fps: Math.round(FPS * 1.6), label: 'The Machinga Method' },
     { type: 'pause',     holdF:  t2f(43.0), triggerPx: 400,   greenPulse: false, label: 'The Machinga Method' },
     { type: 'exit' },
 ];
@@ -78,12 +78,17 @@ function renderFrame(idx) {
     const cw = canvas.width,  ch = canvas.height;
     const iw = img.naturalWidth, ih = img.naturalHeight;
 
-    // Contain scaling (letterbox)
-    const scale = Math.min(cw / iw, ch / ih);
+    // We have an 80px fixed header. We want to draw the image in the safe area below it
+    const headerHeight = 80;
+    const safeAreaHeight = ch - headerHeight;
+
+    // Contain scaling (letterbox) against the safe area so the full frame is visible
+    const scale = Math.min(cw / iw, safeAreaHeight / ih);
     const sw    = iw * scale;
     const sh    = ih * scale;
     const sx    = (cw - sw) / 2;
-    const sy    = (ch - sh) / 2;
+    // Center it vertically inside the safe area, offset by the header height
+    const sy    = headerHeight + (safeAreaHeight - sh) / 2;
 
     ctx.clearRect(0, 0, cw, ch);
     ctx.drawImage(img, sx, sy, sw, sh);
@@ -133,7 +138,7 @@ for (let i = 0; i < FRAME_COUNT; i++) {
         setLoaderProgress((loadedCount / FRAME_COUNT) * 100);
         if (loadedCount === FRAME_COUNT) onAllLoaded();
     };
-    img.src   = `./assets/toWEBP/${name}.webp`;
+    img.src   = `./assets/pencilbombframes/${name}.webp`;
     images[i] = img;
 }
 
@@ -200,6 +205,7 @@ let transInterval  = null;
 let loopInterval   = null;
 let loopCurrentF   = 0;
 let transCurrentF  = 0;
+let isReversing    = false;   // ← NEW: flag to block input while reversing
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  PRE-ENTRY: show the section locked, prompt user to scroll
@@ -207,6 +213,7 @@ let transCurrentF  = 0;
 function showScrollToBegin() {
     videoModeActive = true;
     waitingForFirstScroll = true;
+    isReversing = false;
 
     // Lock body scroll
     document.body.style.overflow = 'hidden';
@@ -232,6 +239,7 @@ function clearPlayback() {
 
 function startTransition(s) {
     clearPlayback();
+    isReversing = false;
     transCurrentF = s.startF;
     renderFrame(transCurrentF);
     const ms = 1000 / (s.fps || FPS);
@@ -285,6 +293,7 @@ function loadState(idx) {
     const s = STATES[idx];
     scrollAccum  = 0;
     playOnceDone = false;
+    isReversing  = false;
     clearPlayback();
     updateUI(idx);
 
@@ -310,6 +319,36 @@ function advanceState() {
     loadState(stateIdx);
 }
 
+function retreatState() {
+    const prevIdx = stateIdx - 2;
+    if (prevIdx < 0) return; // Cannot go back further than 0
+
+    const transState = STATES[stateIdx - 1]; // The transition linking the previous state to the current one
+    stateIdx = prevIdx; // Target the previous interactive state
+    isReversing = true; // Block inputs during rewind
+
+    clearPlayback();
+    updateUI(stateIdx); // Pre-update UI to show we are going backward
+    
+    // Hide continue prompt temporarily
+    contWrap.classList.remove('visible');
+
+    transCurrentF = transState.endF;
+    renderFrame(transCurrentF);
+    
+    const ms = 1000 / (transState.fps || FPS);
+    transInterval = setInterval(() => {
+        transCurrentF--; // Play backwards
+        renderFrame(transCurrentF);
+        if (transCurrentF <= transState.startF) {
+            clearInterval(transInterval);
+            transInterval = null;
+            isReversing = false;
+            loadState(stateIdx);
+        }
+    }, ms);
+}
+
 function enterVideoMode() {
     if (videoModeActive) return;
     if (!allLoaded) return;
@@ -319,6 +358,7 @@ function enterVideoMode() {
 function exitVideoMode() {
     videoModeActive      = false;
     waitingForFirstScroll = true;
+    isReversing          = false;
     clearPlayback();
     document.body.style.overflow = '';
     const marquee = document.querySelector('.marquee-section');
@@ -336,7 +376,7 @@ function updateUI(idx) {
     chapterLabel.textContent = s.label || '';
 
     s.greenPulse ? dwellEl.classList.add('visible') : dwellEl.classList.remove('visible');
-    isInteractive ? contWrap.classList.add('visible') : contWrap.classList.remove('visible');
+    isInteractive && !isReversing ? contWrap.classList.add('visible') : contWrap.classList.remove('visible');
     contFill.style.width = '0%';
 
     // Restore normal "scroll to continue" label
@@ -365,7 +405,7 @@ function updateUI(idx) {
 // rAF: update continue-fill smoothly
 function rafLoop() {
     requestAnimationFrame(rafLoop);
-    if (!videoModeActive || waitingForFirstScroll) return;
+    if (!videoModeActive || waitingForFirstScroll || isReversing) return;
     const s = STATES[stateIdx];
     if (!s || s.type === 'exit' || s.type === 'transition') return;
     if (s.type === 'play-once' && !playOnceDone) return;
@@ -378,6 +418,7 @@ rafLoop();
 // ══════════════════════════════════════════════════════════════════════════════
 function handleScrollDelta(dy) {
     if (!videoModeActive) return;
+    if (isReversing) return;
 
     // ── FIRST SCROLL: start the animation ────────────────────────────────────
     if (waitingForFirstScroll) {
@@ -392,7 +433,20 @@ function handleScrollDelta(dy) {
     if (!s || s.type === 'transition') return;
     if (s.type === 'play-once' && !playOnceDone) return;
 
-    if (dy < 0) { scrollAccum = Math.max(0, scrollAccum + dy); return; }
+    // ── BACKWARDS SCROLL
+    if (dy < 0) { 
+        scrollAccum += dy;
+        // Require a slight threshold (-80px) backwards scroll before triggering rewind
+        if (scrollAccum < -80 && stateIdx >= 2) {
+            scrollAccum = 0;
+            retreatState();
+        } else if (scrollAccum < 0) {
+            scrollAccum = 0; // Cap at 0 if haven't passed the threshold
+        }
+        return; 
+    }
+
+    // ── FORWARDS SCROLL
     scrollAccum += dy;
     if (scrollAccum >= s.triggerPx) advanceState();
 }
