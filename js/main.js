@@ -19,17 +19,17 @@ function t2f(sec) {
 
 // ── State Machine definition ──────────────────────────────────────────────────
 const STATES = [
-    { type: 'play-once', startF: t2f(0.0),  endF: t2f(5.4),   triggerPx: 70,  greenPulse: false, label: null },
-    { type: 'transition',startF: t2f(5.4),  endF: t2f(10.5),  fps: Math.round(FPS * 1.6), label: 'Expanding' },
-    { type: 'loop',      startF: t2f(10.5), endF: t2f(13.93), triggerPx: 200, greenPulse: true,  label: 'Think' },
-    { type: 'transition',startF: t2f(13.93),endF: t2f(17.0),  fps: Math.round(FPS * 1.6), label: '' },
-    { type: 'loop',      startF: t2f(17.0), endF: t2f(19.30), triggerPx: 200, greenPulse: true,  label: 'Make' },
-    { type: 'transition',startF: t2f(19.30),endF: t2f(24.88), fps: Math.round(FPS * 1.6), label: '' },
-    { type: 'loop',      startF: t2f(24.88),endF: t2f(26.93), triggerPx: 200, greenPulse: true,  label: 'Run' },
-    { type: 'transition',startF: t2f(26.93),endF: t2f(29.5),  fps: Math.round(FPS * 1.6), label: '' },
-    { type: 'pause',     holdF:  t2f(30.0), triggerPx: 350,   greenPulse: false, label: 'Think · Make · Run' },
-    { type: 'transition',startF: t2f(30.0), endF: t2f(43.0),  fps: Math.round(FPS * 1.6), label: 'The Machinga Method' },
-    { type: 'pause',     holdF:  t2f(43.0), triggerPx: 400,   greenPulse: false, label: 'The Machinga Method' },
+    { type: 'play-once', startF: t2f(0.0),  endF: t2f(5.4),   triggerPx: 50,  greenPulse: false, label: null },
+    { type: 'transition',startF: t2f(5.4),  endF: t2f(10.5),  fps: Math.round(FPS * 2.4), label: 'Expanding' },
+    { type: 'loop',      startF: t2f(10.5), endF: t2f(13.93), triggerPx: 140, greenPulse: true,  label: 'Think' },
+    { type: 'transition',startF: t2f(13.93),endF: t2f(17.0),  fps: Math.round(FPS * 2.4), label: '' },
+    { type: 'loop',      startF: t2f(17.0), endF: t2f(19.30), triggerPx: 140, greenPulse: true,  label: 'Make' },
+    { type: 'transition',startF: t2f(19.30),endF: t2f(24.88), fps: Math.round(FPS * 2.4), label: '' },
+    { type: 'loop',      startF: t2f(24.88),endF: t2f(26.93), triggerPx: 140, greenPulse: true,  label: 'Run' },
+    { type: 'transition',startF: t2f(26.93),endF: t2f(29.5),  fps: Math.round(FPS * 2.4), label: '' },
+    { type: 'pause',     holdF:  t2f(30.0), triggerPx: 260,   greenPulse: false, label: 'Think · Make · Run' },
+    { type: 'transition',startF: t2f(30.0), endF: t2f(43.0),  fps: Math.round(FPS * 2.4), label: 'The Machinga Method' },
+    { type: 'pause',     holdF:  t2f(43.0), triggerPx: 300,   greenPulse: false, label: 'The Machinga Method' },
     { type: 'exit' },
 ];
 
