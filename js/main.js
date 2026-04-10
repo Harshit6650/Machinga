@@ -52,10 +52,39 @@ const loaderBar    = document.getElementById('loader-progress');
 const loaderPct    = document.getElementById('loader-percentage');
 const siteHeader   = document.querySelector('.site-header');
 
-// Explicitly force loader video to play for harsh mobile browsers
+// Determine video presence and intelligently defer massive HTTP queue
 const loaderVideo  = document.querySelector('.loader-video');
+
+function startImagePreload() {
+    if (images[0]) return; // Guard against multiple calls
+    for (let i = 0; i < FRAME_COUNT; i++) {
+        const img  = new Image();
+        const name = String(i + 1).padStart(5, '0');
+        // Important: GitHub Pages is Case-Sensitive! The folder on disk is PencilBombFrames
+        img.onload = img.onerror = () => {
+            loadedCount++;
+            setLoaderProgress((loadedCount / FRAME_COUNT) * 100);
+            if (loadedCount === FRAME_COUNT) onAllLoaded();
+        };
+        img.src   = `./assets/PencilBombFrames/${name}.webp`;
+        images[i] = img;
+    }
+}
+
 if (loaderVideo) {
-    loaderVideo.play().catch(e => console.warn('Autoplay blocked:', e));
+    // Wait for the video to safely buffer and begin playing before slamming the network
+    loaderVideo.addEventListener('playing', startImagePreload, { once: true });
+    loaderVideo.addEventListener('canplay', startImagePreload, { once: true });
+    
+    loaderVideo.play().catch(e => {
+        console.warn('Autoplay blocked:', e);
+        startImagePreload(); // Fallback if blocked
+    });
+    
+    // Failsafe fallback 
+    setTimeout(startImagePreload, 1500); 
+} else {
+    startImagePreload();
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -136,18 +165,7 @@ function onAllLoaded() {
     }, 200);
 }
 
-for (let i = 0; i < FRAME_COUNT; i++) {
-    const img  = new Image();
-    const name = String(i + 1).padStart(5, '0');
-    // Important: GitHub Pages is Case-Sensitive! The folder on disk is PencilBombFrames
-    img.onload = img.onerror = () => {
-        loadedCount++;
-        setLoaderProgress((loadedCount / FRAME_COUNT) * 100);
-        if (loadedCount === FRAME_COUNT) onAllLoaded();
-    };
-    img.src   = `./assets/PencilBombFrames/${name}.webp`;
-    images[i] = img;
-}
+// Initialization execution is safely managed above
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  PROGRESS RAIL — clickable dots
