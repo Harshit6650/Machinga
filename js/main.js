@@ -191,8 +191,15 @@ function onAllLoaded() {
         loaderScreen.style.pointerEvents = 'none';
         setTimeout(() => {
             loaderScreen.style.display = 'none';
-            // Lock page scroll and show "scroll to begin" — but DON'T start animation yet
-            showScrollToBegin();
+            // Lock page scroll and show "scroll to begin" — ONLY IF at top of page
+            if (window.scrollY < 100) {
+                showScrollToBegin();
+            } else {
+                // If user refreshed further down the page, unlock the page immediately
+                videoModeActive = false;
+                waitingForFirstScroll = true;
+                document.body.style.overflow = '';
+            }
         }, 580);
     }, 200);
 }
@@ -432,8 +439,8 @@ function exitVideoMode() {
     isReversing          = false;
     clearPlayback();
     document.body.style.overflow = '';
-    const marquee = document.querySelector('.marquee-section');
-    if (marquee) marquee.scrollIntoView({ behavior: 'smooth' });
+    const nextSection = document.getElementById('strategic-brain');
+    if (nextSection) nextSection.scrollIntoView({ behavior: 'smooth' });
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -694,3 +701,20 @@ document.querySelectorAll('.statement-section h2, .pricing-card, .belief-item').
     }
     requestAnimationFrame(windFrame);
 })();
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  NAVIGATION UNLOCK — Safely break out of locked video mode natively
+// ══════════════════════════════════════════════════════════════════════════════
+document.querySelectorAll('.site-header a, .footer-links a').forEach(link => {
+    link.addEventListener('click', () => {
+        // If a user maliciously/intentionally clicks ANY navigational anchor to 
+        // bypass the site flow while they are trapped inside the lock cycle, instantly free them!
+        if (videoModeActive) {
+            videoModeActive = false;
+            waitingForFirstScroll = true;
+            isReversing = false;
+            document.body.style.overflow = '';
+            clearPlayback();
+        }
+    });
+});
