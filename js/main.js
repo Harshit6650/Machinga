@@ -718,3 +718,22 @@ document.querySelectorAll('.site-header a, .footer-links a').forEach(link => {
         }
     });
 });
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  AGGRESSIVE VIDEO WAKE-UP — Prevent black frame lag on scroll entry
+// ══════════════════════════════════════════════════════════════════════════════
+const bgVideoObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        const vid = entry.target;
+        if (entry.isIntersecting) {
+            // Only boot decoder when the video is essentially physically visible
+            vid.play().catch(() => {});
+        } else {
+            // Strictly kill the decoder process for this video if it leaves the screen to free RAM
+            vid.pause();
+        }
+    });
+}, { rootMargin: '25% 0px' }); // Triggers just outside the viewport margin
+
+document.querySelectorAll('.fs-card-bg').forEach(v => bgVideoObserver.observe(v));
+
