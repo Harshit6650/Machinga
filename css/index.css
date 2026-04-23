@@ -581,7 +581,7 @@ body {
 /* ══════════════════════════════════════════════════════════════
    Statement Section
    ══════════════════════════════════════════════════════════════ */
-.statement-section { padding: 8rem 0; background: var(--bg-secondary); text-align: center; }
+.statement-section { padding: 8rem 0; background: #ffffff; color: #000000; text-align: center; }
 .statement-section h2 {
     font-size: 4.5vw;
     font-weight: 800;
@@ -591,52 +591,52 @@ body {
     margin-inline: auto;
     line-height: 1.1;
 }
-.statement-section p { font-size: 1.5rem; color: var(--text-muted); max-width: 700px; margin: 0 auto; font-weight: 400; }
+.statement-section p { font-size: 1.5rem; color: #666666; max-width: 700px; margin: 0 auto; font-weight: 400; }
 
 /* ══════════════════════════════════════════════════════════════
    Pricing Cards
    ══════════════════════════════════════════════════════════════ */
-.pricing-section { padding: 8rem 0; }
+.pricing-section { padding: 8rem 0; background: #ffffff; color: #000000; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 .pricing-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-subtle);
+    background: #f9f9f9;
+    border: 1px solid rgba(0, 0, 0, 0.08);
     border-radius: 24px;
     padding: 3rem 2rem;
     transition: transform 0.3s ease, border-color 0.3s ease;
     display: flex;
     flex-direction: column;
 }
-.pricing-card:hover { transform: translateY(-5px); border-color: rgba(255,255,255,0.2); }
+.pricing-card:hover { transform: translateY(-5px); border-color: rgba(0, 0, 0, 0.2); }
 .pricing-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
 .pricing-card h4 { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 1.5rem; }
-.pricing-card .desc { color: var(--text-muted); margin-bottom: 2rem; font-size: 0.95rem; min-height: 100px; }
+.pricing-card .desc { color: #666666; margin-bottom: 2rem; font-size: 0.95rem; min-height: 100px; }
 .pricing-card .features { list-style: none; margin-bottom: 3rem; }
-.pricing-card .features li { padding: 1rem 0; border-bottom: 1px solid var(--border-subtle); font-size: 0.95rem; }
+.pricing-card .features li { padding: 1rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.08); font-size: 0.95rem; }
 .price-box { margin-top: auto; }
-.price-box .label { display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+.price-box .label { display: block; font-size: 0.8rem; color: #666666; text-transform: uppercase; letter-spacing: 1px; }
 .price-box .price { font-size: 2.5rem; font-weight: 800; }
-.price-box .price span { font-size: 1rem; color: var(--text-muted); font-weight: 400; margin-left: 0.2rem; }
+.price-box .price span { font-size: 1rem; color: #666666; font-weight: 400; margin-left: 0.2rem; }
 
 /* ══════════════════════════════════════════════════════════════
    About Section
    ══════════════════════════════════════════════════════════════ */
-.about-section { padding: 8rem 0; background: var(--bg-secondary); }
+.about-section { padding: 8rem 0; background: #ffffff; color: #000000; }
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
 .name-title    { font-size: 5rem; letter-spacing: -2px; line-height: 1; }
 .pronunciation { font-family: monospace; color: var(--accent-color); font-size: 1.2rem; margin-top: 1rem; }
 .about-text-col .definition  { font-size: 1.5rem; font-weight: 500; margin-bottom: 2rem; line-height: 1.4; }
-.about-text-col .explanation { font-size: 1.2rem; color: var(--text-muted); line-height: 1.6; }
+.about-text-col .explanation { font-size: 1.2rem; color: #666666; line-height: 1.6; }
 
 /* ══════════════════════════════════════════════════════════════
    Beliefs Section
    ══════════════════════════════════════════════════════════════ */
-.beliefs-section { padding: 8rem 0; border-top: 1px solid var(--border-subtle); }
-.section-label { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); margin-bottom: 4rem; text-align: center; }
+.beliefs-section { padding: 8rem 0; border-top: 1px solid rgba(0, 0, 0, 0.08); background: #ffffff; color: #000000; }
+.section-label { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: #666666; margin-bottom: 4rem; text-align: center; }
 .beliefs-list { max-width: 800px; margin: 0 auto; }
 .belief-item {
     padding: 2.5rem 0;
-    border-bottom: 1px solid var(--border-subtle);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     display: flex;
     gap: 2rem;
     transition: transform 0.3s ease;
@@ -648,26 +648,199 @@ body {
 /* ══════════════════════════════════════════════════════════════
    Contact & Footer
    ══════════════════════════════════════════════════════════════ */
-.contact-section { padding: 8rem 0 4rem; text-align: center; }
-.huge-text    { font-size: 7vw; line-height: 1; letter-spacing: -3px; margin-bottom: 3rem; }
-.prompt-text  { font-size: 1.5rem; color: var(--text-muted); margin-bottom: 2rem; }
-.email-link   { display: block; font-size: 2.5rem; font-weight: 600; color: white; text-decoration: underline; text-decoration-color: var(--accent-color); text-underline-offset: 8px; margin-bottom: 3rem; transition: color 0.3s; }
-.email-link:hover { color: var(--accent-color); }
+.contact-section {
+    position: relative;
+    padding: 6rem 0;
+    background: linear-gradient(to bottom, #ffffff 50%, #0c0c0e 50%);
+}
 
-.btn-primary  { background: white; color: black; border: none; padding: 1.2rem 3.5rem; border-radius: 50px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: transform 0.2s; }
-.btn-primary:hover { transform: scale(1.05); }
+.contact-card {
+    background: #ffffff;
+    border-radius: 40px;
+    padding: 5rem 4rem;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.05);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
 
-.site-footer { border-top: 1px solid var(--border-subtle); padding: 4rem 0; background: var(--bg-secondary); }
-.footer-grid { display: grid; grid-template-columns: 1fr 1fr 1.5fr; gap: 3rem; }
-.footer-logo-img { width: clamp(200px, 25vw, 340px); height: auto; max-height: 85px; margin-bottom: 1.5rem; display: block; object-fit: contain; }
-.footer-links { display: flex; flex-direction: column; gap: 1rem; }
-.footer-links a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: white; }
-.newsletter p { margin-bottom: 1rem; }
-.newsletter-form { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
-.newsletter-form input { flex-grow: 1; padding: 0.8rem 1rem; background: var(--bg-main); border: 1px solid var(--border-subtle); color: white; border-radius: 8px; font-family: inherit; }
-.btn-secondary { background: white; color: black; border: none; padding: 0 1.5rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
-.small-text { font-size: 0.8rem; color: var(--text-muted); }
+.contact-info-side .huge-text {
+    font-size: 3rem;
+    line-height: 1.2;
+    letter-spacing: -1px;
+    margin-bottom: 2rem;
+    color: #000;
+}
+.contact-info-side .prompt-text {
+    font-size: 1.1rem;
+    color: #666666;
+    margin-bottom: 2rem;
+    max-width: 90%;
+}
+.email-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #666666;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+.email-link:hover { color: #000; }
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 1.2rem 1.5rem;
+    border: 1px solid #eaeaea;
+    border-radius: 30px;
+    background: #ffffff;
+    font-family: inherit;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.3s;
+}
+.contact-form textarea {
+    border-radius: 20px;
+    resize: vertical;
+}
+.contact-form input:focus,
+.contact-form textarea:focus {
+    border-color: #0FC823;
+}
+
+.btn-gradient {
+    background: linear-gradient(90deg, #2CA63D, #B0CB1F);
+    color: #ffffff;
+    border: none;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 100%;
+}
+.btn-gradient:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(44, 166, 61, 0.2);
+}
+
+.site-footer {
+    padding: 4rem 0 6rem;
+    background: #0c0c0e;
+    color: #ffffff;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.5fr;
+    gap: 4rem;
+}
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+.brand-top {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+.footer-logo-img {
+    height: 40px;
+    width: auto;
+    object-fit: contain;
+}
+.brand-top .divider {
+    color: #444;
+    font-size: 1.5rem;
+    font-weight: 300;
+}
+.brand-top h4 {
+    font-size: 0.9rem;
+    color: #888;
+    font-weight: 400;
+}
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+.social-links a {
+    color: #888;
+    transition: color 0.3s, border-color 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.social-links a:hover {
+    color: #0FC823;
+    border-color: #0FC823;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+.footer-links a {
+    color: #888;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+.footer-links a:hover {
+    color: #ffffff;
+}
+
+.newsletter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.newsletter p {
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+.newsletter .small-text {
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 1rem;
+}
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.newsletter-form input {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    color: #ffffff;
+    border-radius: 30px;
+    font-family: inherit;
+    outline: none;
+}
+.newsletter-form input:focus {
+    border-color: #555;
+}
+.newsletter-form .btn-gradient {
+    align-self: flex-start;
+    padding: 1rem 2rem;
+    width: auto;
+}
 
 /* ══════════════════════════════════════════════════════════════
    Responsive
@@ -716,9 +889,14 @@ body {
     .site-header { padding: 0 2rem; }
     .belief-item { flex-direction: column; gap: 0.5rem; }
     .statement-section h2 { font-size: 2.5rem; }
-    .huge-text { font-size: 4rem; }
-    .email-link { font-size: 1.5rem; }
+    .huge-text { font-size: 2.5rem; }
+    .email-link { font-size: 1.1rem; }
     #progress-rail { right: 10px; }
     #chapter-label { left: 16px; }
     #dwell-indicator { left: 10px; }
+    
+    .contact-card { grid-template-columns: 1fr; padding: 3rem 2rem; }
+    .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .brand-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .brand-top .divider { display: none; }
 }
