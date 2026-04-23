@@ -847,8 +847,9 @@ body {
    ══════════════════════════════════════════════════════════════ */
 @media (max-width: 1024px) {
     .pricing-grid { grid-template-columns: 1fr; }
-    .footer-grid  { grid-template-columns: 1fr; }
     .about-grid   { grid-template-columns: 1fr; }
+    .contact-card { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 3rem; }
+    .footer-grid  { grid-template-columns: 1fr; gap: 3rem; }
 
     .menu-toggle {
         display: flex;
@@ -895,8 +896,9 @@ body {
     #chapter-label { left: 16px; }
     #dwell-indicator { left: 10px; }
     
-    .contact-card { grid-template-columns: 1fr; padding: 3rem 2rem; }
-    .footer-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .contact-card { padding: 3rem 1.5rem; }
     .brand-top { flex-direction: column; align-items: flex-start; gap: 1rem; }
     .brand-top .divider { display: none; }
+    
+    .newsletter-form .btn-gradient { width: 100%; align-self: stretch; }
 }
