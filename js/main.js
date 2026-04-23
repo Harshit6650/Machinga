@@ -10,8 +10,10 @@
 //  • Canvas uses contain-scaling so it looks correct on any screen size
 // ══════════════════════════════════════════════════════════════════════════════
 
+const isMobileView = window.innerWidth <= 1024;
 const FPS         = 24;
-const FRAME_COUNT = 1079;
+const FRAME_COUNT = isMobileView ? 981 : 1079;
+const FRAMES_DIR  = isMobileView ? 'pencilbombframesformobile' : 'PencilBombFrames';
 
 function t2f(sec) {
     return Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(sec * FPS) - 1));
@@ -80,7 +82,7 @@ function startImagePreload() {
                  onAllLoaded();
             }
         };
-        img.src   = `./assets/PencilBombFrames/${name}.webp`;
+        img.src   = `./assets/${FRAMES_DIR}/${name}.webp`;
         images[i] = img;
     }
 }
@@ -322,6 +324,11 @@ function startLoop(s) {
     clearPlayback();
     loopCurrentF = s.startF;
     renderFrame(loopCurrentF);
+    
+    // Mobile sequences often have slightly different loop points or lack seamless loops.
+    // Pausing on the first frame of the loop prevents the "continuously playing/jumping" issue.
+    if (isMobileView) return;
+
     const ms = 1000 / FPS;
     loopInterval = setInterval(() => {
         loopCurrentF++;
@@ -737,3 +744,38 @@ const bgVideoObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.fs-card-bg').forEach(v => bgVideoObserver.observe(v));
 
+// ══════════════════════════════════════════════════════════════════════════════
+//  MOBILE MENU TOGGLE
+// ══════════════════════════════════════════════════════════════════════════════
+const menuToggle = document.querySelector('.menu-toggle');
+const desktopNav = document.querySelector('.desktop-nav');
+
+if (menuToggle && desktopNav) {
+    menuToggle.addEventListener('click', () => {
+        menuToggle.classList.toggle('open');
+        desktopNav.classList.toggle('open');
+        if (desktopNav.classList.contains('open')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            if (!videoModeActive) document.body.style.overflow = '';
+        }
+    });
+
+    desktopNav.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            menuToggle.classList.remove('open');
+            desktopNav.classList.remove('open');
+            if (!videoModeActive) document.body.style.overflow = '';
+        });
+    });
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  BREAKPOINT RESIZE RELOAD (To switch between Desktop and Mobile animation frames)
+// ══════════════════════════════════════════════════════════════════════════════
+window.addEventListener('resize', () => {
+    const isNowMobile = window.innerWidth <= 1024;
+    if (isNowMobile !== isMobileView) {
+        window.location.reload();
+    }
+});

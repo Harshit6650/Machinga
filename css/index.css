@@ -73,6 +73,25 @@ body {
     border-radius: 50px;
 }
 
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    z-index: 1001;
+}
+.menu-toggle span {
+    width: 100%;
+    height: 3px;
+    background-color: #000;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
 /* ══════════════════════════════════════════════════════════════
    VIDEO SCROLL SECTION — State-Machine
    ══════════════════════════════════════════════════════════════ */
@@ -657,10 +676,44 @@ body {
     .pricing-grid { grid-template-columns: 1fr; }
     .footer-grid  { grid-template-columns: 1fr; }
     .about-grid   { grid-template-columns: 1fr; }
+
+    .menu-toggle {
+        display: flex;
+    }
+    .desktop-nav {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        right: -100vw;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.98);
+        transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 1000;
+        margin-left: 0;
+    }
+    .desktop-nav.open {
+        right: 0;
+    }
+    .desktop-nav a {
+        margin: 1.5rem 0;
+        font-size: 1.5rem;
+    }
+    .menu-toggle.open span:nth-child(1) {
+        transform: translateY(9px) rotate(45deg);
+    }
+    .menu-toggle.open span:nth-child(2) {
+        opacity: 0;
+    }
+    .menu-toggle.open span:nth-child(3) {
+        transform: translateY(-9px) rotate(-45deg);
+    }
 }
 @media (max-width: 768px) {
     .site-header { padding: 0 2rem; }
-    .desktop-nav { display: none; }
     .belief-item { flex-direction: column; gap: 0.5rem; }
     .statement-section h2 { font-size: 2.5rem; }
     .huge-text { font-size: 4rem; }
