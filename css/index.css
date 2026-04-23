@@ -98,7 +98,7 @@ body {
 
 .video-section {
     /* Full viewport — works on any screen size */
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     position: relative;
     overflow: hidden;
@@ -337,7 +337,7 @@ body {
    ══════════════════════════════════════════════════════════════ */
 .loader-screen {
     position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
+    top: 0; left: 0; width: 100%; height: 100vh;
     background: #ffffff;
     color: #000000;
     z-index: 9999;
@@ -349,10 +349,10 @@ body {
 .loader-content { width: 80%; max-width: 600px; text-align: center; position: relative; z-index: 2; pointer-events: none; }
 .loader-video    { 
     position: absolute; 
-    top: 80px; 
+    top: 0; 
     left: 0; 
     width: 100%; 
-    height: calc(100% - 80px); 
+    height: 100%; 
     object-fit: contain; 
     z-index: 1;
     pointer-events: none;
@@ -466,7 +466,7 @@ body {
 }
 .fs-card {
     position: relative;
-    width: 100vw;
+    width: 100%;
     height: 100vh;
     overflow: hidden;
     display: flex;
@@ -581,76 +581,93 @@ body {
 /* ══════════════════════════════════════════════════════════════
    Statement Section
    ══════════════════════════════════════════════════════════════ */
-.statement-section { padding: 8rem 0; background: #ffffff; color: #000000; text-align: center; }
+.statement-section { padding: 44px 0; background: #ffffff; color: #000000; text-align: left; }
+.statement-section .container { max-width: 1000px; margin: 0 auto; padding: 0 2rem; }
+.statement-label { color: #37A939; font-size: 0.9rem; font-weight: 600; margin-bottom: 2rem; display: block; }
 .statement-section h2 {
-    font-size: 4.5vw;
-    font-weight: 800;
-    letter-spacing: -2px;
+    font-size: 3rem;
+    font-weight: 500;
     margin-bottom: 2rem;
-    max-width: 900px;
-    margin-inline: auto;
-    line-height: 1.1;
+    max-width: 100%;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: #1a1a1a;
 }
-.statement-section p { font-size: 1.5rem; color: #666666; max-width: 700px; margin: 0 auto; font-weight: 400; }
+.statement-section p { font-size: 1.2rem; color: #888888; max-width: 800px; font-weight: 400; line-height: 1.6; margin: 0; }
 
 /* ══════════════════════════════════════════════════════════════
    Pricing Cards
    ══════════════════════════════════════════════════════════════ */
-.pricing-section { padding: 8rem 0; background: #ffffff; color: #000000; }
+.pricing-section { padding: 44px 0; background: #ffffff; color: #000000; }
 .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
 .pricing-card {
-    background: #f9f9f9;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 24px;
-    padding: 3rem 2rem;
-    transition: transform 0.3s ease, border-color 0.3s ease;
+    background: linear-gradient(to bottom, #ffffff 0%, #f4f4f4 100%);
+    border: 1px solid #eaeaea;
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 15px 30px -10px rgba(0,0,0,0.08);
 }
-.pricing-card:hover { transform: translateY(-5px); border-color: rgba(0, 0, 0, 0.2); }
-.pricing-card h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.pricing-card h4 { font-size: 1.1rem; color: var(--accent-color); margin-bottom: 1.5rem; }
-.pricing-card .desc { color: #666666; margin-bottom: 2rem; font-size: 0.95rem; min-height: 100px; }
-.pricing-card .features { list-style: none; margin-bottom: 3rem; }
-.pricing-card .features li { padding: 1rem 0; border-bottom: 1px solid rgba(0, 0, 0, 0.08); font-size: 0.95rem; }
+.pricing-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.12); }
+.pricing-card.highlight-card { border-color: #0FC823; }
+.pricing-card h3 { font-size: 2rem; margin-bottom: 1rem; text-transform: uppercase; font-weight: 500; line-height: 1.2; color: #1a1a1a; }
+.pricing-card h4 { font-size: 1rem; color: #0FC823; margin-bottom: 2rem; font-style: italic; font-weight: 500; }
+.pricing-card .desc { color: #888888; margin-bottom: 2rem; font-size: 0.95rem; min-height: 120px; line-height: 1.6; }
+.pricing-card .features { list-style: none; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #dcdcdc; }
+.pricing-card .features li { padding: 0.5rem 0 0.5rem 2rem; border-bottom: none; font-size: 0.9rem; color: #666; position: relative; }
+.pricing-card .features li::before { content: '✓'; color: #0FC823; position: absolute; left: 0; top: 0.5rem; font-weight: 800; }
 .price-box { margin-top: auto; }
-.price-box .label { display: block; font-size: 0.8rem; color: #666666; text-transform: uppercase; letter-spacing: 1px; }
-.price-box .price { font-size: 2.5rem; font-weight: 800; }
-.price-box .price span { font-size: 1rem; color: #666666; font-weight: 400; margin-left: 0.2rem; }
+.price-box .label { display: block; font-size: 0.8rem; color: #888888; margin-bottom: 0.2rem; }
+.price-box .price { font-size: 2.5rem; font-weight: 500; color: #000; }
+.price-box .price span { font-size: 0.9rem; color: #888888; font-weight: 400; margin-left: 0.2rem; }
 
 /* ══════════════════════════════════════════════════════════════
    About Section
    ══════════════════════════════════════════════════════════════ */
-.about-section { padding: 8rem 0; background: #ffffff; color: #000000; }
-.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
-.name-title    { font-size: 5rem; letter-spacing: -2px; line-height: 1; }
-.pronunciation { font-family: monospace; color: var(--accent-color); font-size: 1.2rem; margin-top: 1rem; }
-.about-text-col .definition  { font-size: 1.5rem; font-weight: 500; margin-bottom: 2rem; line-height: 1.4; }
-.about-text-col .explanation { font-size: 1.2rem; color: #666666; line-height: 1.6; }
+.about-section { padding: 44px 0; background: #ffffff; color: #000000; }
+.about-header { margin-bottom: 4rem; text-align: left; }
+.about-coconut-img { width: 160px; height: auto; margin-bottom: 1.5rem; }
+.name-title { font-size: 4.5rem; font-weight: 500; letter-spacing: -1px; margin-bottom: 1rem; text-transform: uppercase; color: #1a1a1a; line-height: 1; }
+.pronunciation { font-size: 1.5rem; color: #333333; text-transform: uppercase; letter-spacing: 2px; font-weight: 400; }
+.about-text-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+.about-text-grid p { font-size: 0.95rem; color: #666666; line-height: 1.8; margin: 0; }
 
 /* ══════════════════════════════════════════════════════════════
    Beliefs Section
    ══════════════════════════════════════════════════════════════ */
-.beliefs-section { padding: 8rem 0; border-top: 1px solid rgba(0, 0, 0, 0.08); background: #ffffff; color: #000000; }
-.section-label { font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; color: #666666; margin-bottom: 4rem; text-align: center; }
-.beliefs-list { max-width: 800px; margin: 0 auto; }
+.beliefs-section { padding: 44px 0; background: #ffffff; color: #000000; }
+.beliefs-heading { font-size: 2.5rem; font-weight: 800; margin-bottom: 4rem; color: #1a1a1a; }
+.beliefs-list { border-top: 1px solid #eaeaea; }
 .belief-item {
+    display: grid;
+    grid-template-columns: 200px 1fr;
     padding: 2.5rem 0;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    display: flex;
-    gap: 2rem;
-    transition: transform 0.3s ease;
+    border-bottom: 1px solid #eaeaea;
+    align-items: start;
 }
-.belief-item:hover { transform: translateX(10px); }
-.belief-item .tag { min-width: 120px; font-size: 0.8rem; color: var(--accent-color); letter-spacing: 1px; padding-top: 0.5rem; }
-.belief-item p { font-size: 1.8rem; font-weight: 500; letter-spacing: -0.5px; line-height: 1.3; }
+.belief-item .tag {
+    font-size: 0.85rem;
+    color: #999999;
+}
+.belief-content h4 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+.belief-content p {
+    font-size: 0.95rem;
+    color: #888888;
+}
 
 /* ══════════════════════════════════════════════════════════════
    Contact & Footer
    ══════════════════════════════════════════════════════════════ */
 .contact-section {
     position: relative;
-    padding: 6rem 0;
+    padding: 44px 0;
     background: linear-gradient(to bottom, #ffffff 50%, #0c0c0e 50%);
 }
 
@@ -900,8 +917,8 @@ body {
         align-items: center;
         position: fixed;
         top: 0;
-        right: -100vw;
-        width: 100vw;
+        right: -100%;
+        width: 100%;
         height: 100vh;
         background: rgba(255, 255, 255, 0.98);
         transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -926,7 +943,8 @@ body {
     }
 }
 @media (max-width: 768px) {
-    .site-header { padding: 0 2rem; }
+    .container { padding: 0 1.5rem; }
+    .site-header { padding: 0 1.5rem; }
     .belief-item { flex-direction: column; gap: 0.5rem; }
     .statement-section h2 { font-size: 2.5rem; }
     .huge-text { font-size: 2.5rem; }
