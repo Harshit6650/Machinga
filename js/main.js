@@ -779,3 +779,35 @@ window.addEventListener('resize', () => {
         window.location.reload();
     }
 });
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  CONTACT FORM SUBMISSION
+// ══════════════════════════════════════════════════════════════════════════════
+const contactForm = document.getElementById('contact-us-form');
+const successMessage = document.getElementById('contact-success-message');
+
+if (contactForm && successMessage) {
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Hide form and show success message
+        contactForm.style.display = 'none';
+        successMessage.style.display = 'flex';
+    });
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  NEWSLETTER SUBMISSION
+// ══════════════════════════════════════════════════════════════════════════════
+const newsletterForm = document.getElementById('newsletter-form');
+const newsletterContent = document.getElementById('newsletter-content-wrap');
+const newsletterSuccess = document.getElementById('newsletter-success-message');
+
+if (newsletterForm && newsletterContent && newsletterSuccess) {
+    newsletterForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        newsletterContent.style.display = 'none';
+        newsletterSuccess.style.display = 'flex';
+    });
+}

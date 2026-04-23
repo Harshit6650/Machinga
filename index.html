@@ -304,13 +304,17 @@
                     </a>
                 </div>
                 <div class="contact-form-side">
-                    <form class="contact-form">
+                    <form class="contact-form" id="contact-us-form">
                         <input type="text" placeholder="Name" required>
                         <input type="email" placeholder="Email" required>
                         <input type="text" placeholder="What are you looking for" required>
                         <textarea placeholder="Tell us more" rows="4" required></textarea>
                         <button type="submit" class="btn-gradient">Send It</button>
                     </form>
+                    <div id="contact-success-message" class="success-message" style="display: none;">
+                        <h3>Thank you!</h3>
+                        <p>Your message has been received. We'll be in touch soon.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -338,12 +342,18 @@
                 <a href="#contact">Contact</a>
             </div>
             <div class="newsletter">
-                <p>Get our monthly take on what's working in content.</p>
-                <p class="small-text">Unsubscribe at any time.</p>
-                <form class="newsletter-form">
-                    <input type="email" placeholder="Email">
-                    <button type="submit" class="btn-gradient">Send It</button>
-                </form>
+                <div id="newsletter-content-wrap">
+                    <p>Get our monthly take on what's working in content.</p>
+                    <p class="small-text">Unsubscribe at any time.</p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" placeholder="Email" required>
+                        <button type="submit" class="btn-gradient">Send It</button>
+                    </form>
+                </div>
+                <div id="newsletter-success-message" class="success-message footer-success" style="display: none;">
+                    <h4>Thank you!</h4>
+                    <p>You've successfully subscribed to our newsletter.</p>
+                </div>
             </div>
         </div>
     </footer>
