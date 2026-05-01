@@ -1,0 +1,378 @@
+/* ══════════════════════════════════════════════════════════════
+   Machinga — appreciate.css (Case Study)
+   ══════════════════════════════════════════════════════════════ */
+
+.cs-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.cs-container-large {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+/* Typography & Utilities */
+.green-text {
+    color: var(--green);
+}
+
+.cs-section-label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 1.5rem;
+}
+
+.cs-section-heading {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.5px;
+}
+
+.cs-section-text {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.cs-quote {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.4;
+    padding-left: 20px;
+    border-left: 3px solid var(--green);
+    margin: 3rem 0;
+}
+
+
+
+/* ── Hero Section ───────────────────────────────────────────── */
+.cs-hero {
+    padding: 10rem 0 4rem;
+    background: #fff;
+    text-align: left;
+}
+
+.cs-title {
+    font-size: clamp(4rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    color: #1a1a1a;
+    margin-bottom: 4rem;
+    letter-spacing: -2px;
+}
+
+.cs-meta {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+    border-top: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    padding: 2rem 0;
+    align-items: start;
+}
+
+.meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.meta-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.meta-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.cs-hero-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    background: #f4f4f4; /* placeholder */
+}
+
+/* ── Challenge & Solution ───────────────────────────────────── */
+.cs-block-section {
+    padding: 5rem 0;
+    background: #fff;
+}
+
+.cs-content-narrow {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cs-image-center {
+    margin: 4rem 0;
+    text-align: center;
+}
+
+.cs-image-center img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.cs-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-top: 4rem;
+}
+
+.cs-two-col h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+/* ── Dark Section (Design System) ───────────────────────────── */
+.cs-dark-section {
+    background: #1A1A1A;
+    color: #fff;
+    padding: 8rem 0;
+}
+
+.cs-dark-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.cs-dark-grid img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+}
+
+.cs-dark-section .cs-section-heading {
+    color: #fff;
+}
+
+.cs-dark-section .cs-section-text {
+    color: #ccc;
+}
+
+/* ── Four Screens ───────────────────────────────────────────── */
+.cs-four-screens {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-top: 4rem;
+}
+
+.cs-four-screens img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ── Result & Outcome Sections ──────────────────────────────── */
+.cs-split-section {
+    padding: 6rem 0;
+    background: #fff;
+}
+
+.cs-split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+    align-items: center;
+}
+
+.cs-split-grid.reverse {
+    direction: rtl;
+}
+
+.cs-split-grid.reverse > * {
+    direction: ltr;
+}
+
+.cs-split-image img {
+    width: 100%;
+    border-radius: 16px;
+}
+
+.cs-three-screens {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.cs-three-screens img {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ── Stats Section ──────────────────────────────────────────── */
+.cs-stats-section {
+    padding: 6rem 0;
+    background: #fff;
+    text-align: center;
+    border-top: 1px solid #eaeaea;
+}
+
+.cs-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.cs-stat-item h4 {
+    font-size: clamp(3rem, 5vw, 4rem);
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 0.5rem;
+}
+
+.cs-stat-item span {
+    font-size: 1rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+}
+
+.cs-stats-text {
+    font-size: 1.2rem;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* ── Testimonial ────────────────────────────────────────────── */
+.cs-testimonial {
+    padding: 6rem 0;
+    background: #f9f9f9;
+}
+
+.cs-testimonial-content {
+    max-width: 800px;
+    margin: 0 auto;
+    border-left: 4px solid var(--green);
+    padding-left: 3rem;
+}
+
+.cs-testimonial-text {
+    font-size: 2rem;
+    font-weight: 500;
+    color: #1a1a1a;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+}
+
+.cs-testimonial-author {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #555;
+}
+
+/* ── Next Project ───────────────────────────────────────────── */
+.cs-next-project {
+    position: relative;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    overflow: hidden;
+}
+
+.cs-next-bg {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    object-fit: cover;
+    z-index: 1;
+}
+
+.cs-next-overlay {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 2;
+}
+
+.cs-next-content {
+    position: relative;
+    z-index: 3;
+}
+
+.cs-next-label {
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.cs-next-title {
+    font-size: 4rem;
+    font-weight: 800;
+    margin-bottom: 2rem;
+}
+
+.btn-outline {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: 2px solid var(--green);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background: var(--green);
+    color: #1a1a1a;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .cs-two-col, .cs-dark-grid, .cs-split-grid, .cs-stats-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    .cs-four-screens {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .cs-three-screens {
+        grid-template-columns: 1fr;
+    }
+    .cs-split-grid.reverse > * {
+        direction: ltr;
+    }
+    .cs-split-grid.reverse {
+        direction: ltr;
+    }
+    .cs-meta {
+        gap: 1.5rem;
+    }
+}
