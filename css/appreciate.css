@@ -373,6 +373,17 @@
         direction: ltr;
     }
     .cs-meta {
+        grid-template-columns: 1fr 1fr;
         gap: 1.5rem;
+    }
+    .cs-title {
+        font-size: clamp(2.5rem, 10vw, 4rem);
+        margin-bottom: 2rem;
+    }
+    .cs-next-title {
+        font-size: 2.5rem;
+    }
+    .cs-stat-item h4 {
+        font-size: 2.5rem;
     }
 }

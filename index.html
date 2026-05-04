@@ -168,7 +168,7 @@
                     <span class="fs-tag">FMGC</span>
                 </div>
             </div>
-            <div class="scroll-down-indicator"><span>Details</span> <span class="arrow">&darr;</span></div>
+            <div class="scroll-down-indicator"><a href="aava.html" style="color: white; text-decoration: none;"><span>Details</span></a> <span class="arrow">&darr;</span></div>
         </div>
 
         <div class="fs-card">
@@ -184,7 +184,7 @@
                     <span class="fs-tag">Retail</span>
                 </div>
             </div>
-            <div class="scroll-down-indicator"><span>Details</span> <span class="arrow">&darr;</span></div>
+            <div class="scroll-down-indicator"><a href="hamleys.html" style="color: white; text-decoration: none;"><span>Details</span></a> <span class="arrow">&darr;</span></div>
         </div>
     </section>
 
@@ -284,52 +284,51 @@
         </div>
     </section>
 
-    <!-- Beliefs -->
+        <!-- Beliefs -->
     <section class="beliefs-section">
         <div class="container">
             <span class="statement-label">What We Believe</span>
             <h3 class="beliefs-heading">Things we believe to be true.</h3>
-            <div class="beliefs-list">
-                <div class="belief-item">
-                    <span class="tag">On Strategy</span>
-                    <div class="belief-content">
-                        <h4>Strategy isn't a phase you rush through.</h4>
-                        <p>It's the reason everything else works.</p>
+            
+            <div class="beliefs-scroll-layout" style="display: flex; position: relative;">
+                <!-- Left Sticky Column -->
+                <div class="beliefs-left" style="width: 350px; position: sticky; top: 50vh; height: 60px; transform: translateY(-50%); display: flex; align-items: flex-start; gap: 12px; overflow: hidden; font-size: 40px; font-weight: 800; color: #999999; text-transform: uppercase;">
+                    <span style="height: 60px; line-height: 60px;">ON</span>
+                    <div id="dynamic-belief-words" style="display: flex; flex-direction: column; transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1); margin-top: 0;">
+                        <span style="height: 60px; line-height: 60px; color: #1a1a1a;">Strategy</span>
+                        <span style="height: 60px; line-height: 60px; color: #1a1a1a;">Content</span>
+                        <span style="height: 60px; line-height: 60px; color: #1a1a1a;">Briefs</span>
+                        <span style="height: 60px; line-height: 60px; color: #1a1a1a;">Creative</span>
+                        <span style="height: 60px; line-height: 60px; color: #1a1a1a;">Attention</span>
+                        <span style="height: 60px; line-height: 60px; color: #1a1a1a;">Reality</span>
                     </div>
                 </div>
-                <div class="belief-item">
-                    <span class="tag">On Content</span>
-                    <div class="belief-content">
-                        <h4>Content should be an engine, not a slot machine.</h4>
-                        <p>Systems beat one-offs. Every time.</p>
+                
+                <!-- Right Scrolling Column -->
+                <div class="beliefs-right" style="flex: 1;">
+                    <div class="belief-scroll-item" data-index="0" data-tag="On Strategy" style="padding: 15vh 0; opacity: 0.2; transition: opacity 0.5s ease;">
+                        <h4 style="font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px;">Strategy isn't a phase you rush through.</h4>
+                        <p style="font-size: 14px; color: #888888;">It's the reason everything else works.</p>
                     </div>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">On Briefs</span>
-                    <div class="belief-content">
-                        <h4>The brief is rarely about what the brief says it's about.</h4>
-                        <p>Dig until you hit the real question.</p>
+                    <div class="belief-scroll-item" data-index="1" data-tag="On Content" style="padding: 15vh 0; opacity: 0.2; transition: opacity 0.5s ease;">
+                        <h4 style="font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px;">Content should be an engine, not a slot machine.</h4>
+                        <p style="font-size: 14px; color: #888888;">Systems beat one-offs. Every time.</p>
                     </div>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">On Creative</span>
-                    <div class="belief-content">
-                        <h4>The best creative comes from understanding, not guessing.</h4>
-                        <p>Do the homework. Then do the fun part.</p>
+                    <div class="belief-scroll-item" data-index="2" data-tag="On Briefs" style="padding: 15vh 0; opacity: 0.2; transition: opacity 0.5s ease;">
+                        <h4 style="font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px;">The brief is rarely about what the brief says it's about.</h4>
+                        <p style="font-size: 14px; color: #888888;">Dig until you hit the real question.</p>
                     </div>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">On Attention</span>
-                    <div class="belief-content">
-                        <h4>Compound interest works for attention too.</h4>
-                        <p>Show up consistently, or don't bother showing up.</p>
+                    <div class="belief-scroll-item" data-index="3" data-tag="On Creative" style="padding: 15vh 0; opacity: 0.2; transition: opacity 0.5s ease;">
+                        <h4 style="font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px;">The best creative comes from understanding, not guessing.</h4>
+                        <p style="font-size: 14px; color: #888888;">Do the homework. Then do the fun part.</p>
                     </div>
-                </div>
-                <div class="belief-item">
-                    <span class="tag">On Reality</span>
-                    <div class="belief-content">
-                        <h4>Virality isn't luck.</h4>
-                        <p>It's research dressed up as spontaneity.</p>
+                    <div class="belief-scroll-item" data-index="4" data-tag="On Attention" style="padding: 15vh 0; opacity: 0.2; transition: opacity 0.5s ease;">
+                        <h4 style="font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px;">Compound interest works for attention too.</h4>
+                        <p style="font-size: 14px; color: #888888;">Show up consistently, or don't bother showing up.</p>
+                    </div>
+                    <div class="belief-scroll-item" data-index="5" data-tag="On Reality" style="padding: 15vh 0; opacity: 0.2; transition: opacity 0.5s ease;">
+                        <h4 style="font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 8px;">Virality isn't luck.</h4>
+                        <p style="font-size: 14px; color: #888888;">It's research dressed up as spontaneity.</p>
                     </div>
                 </div>
             </div>

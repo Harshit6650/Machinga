@@ -38,7 +38,7 @@ const VIDEO_DURATION_F = FRAME_COUNT - 1;
 
 // ── DOM ───────────────────────────────────────────────────────────────────────
 const canvas       = document.getElementById('hero-canvas');
-const ctx          = canvas.getContext('2d');
+const ctx          = canvas ? canvas.getContext('2d') : null;
 const videoSection = document.getElementById('video-section');
 const railEl       = document.getElementById('progress-rail');
 const chapterLabel = document.getElementById('chapter-label');
@@ -57,6 +57,7 @@ const siteHeader   = document.querySelector('.site-header');
 const loaderVideo  = document.querySelector('.loader-video');
 
 function startImagePreload() {
+    if (!canvas) return; // Guard for inner pages
     if (images[0]) return; // Guard against multiple calls
     
     // Absolute failsafe: No matter what happens with the network, lift the loader screen after 12 seconds.
@@ -98,7 +99,7 @@ if (loaderVideo) {
     
     // Failsafe fallback 
     setTimeout(startImagePreload, 1500); 
-} else {
+} else if (canvas) {
     startImagePreload();
 }
 
@@ -106,6 +107,7 @@ if (loaderVideo) {
 //  RESPONSIVE CANVAS — contain-scale to any screen
 // ══════════════════════════════════════════════════════════════════════════════
 function resizeCanvas() {
+    if (!canvas || !videoSection) return;
     canvas.width  = videoSection.clientWidth  || window.innerWidth;
     canvas.height = videoSection.clientHeight || window.innerHeight;
     // Re-render whatever frame we're on
@@ -213,49 +215,51 @@ function onAllLoaded() {
 const railDotEls = [];
 const railSegEls = [];
 
-for (let i = 0; i < STATES.length; i++) {
-    const s = STATES[i];
-    if (s.type === 'exit') break;
+if (railEl) {
+    for (let i = 0; i < STATES.length; i++) {
+        const s = STATES[i];
+        if (s.type === 'exit') break;
 
-    const dur = Math.max(4, Math.round(
-        ((s.holdF ?? s.endF ?? 0) - (s.holdF ?? s.startF ?? 0)) / FPS * 14
-    ));
+        const dur = Math.max(4, Math.round(
+            ((s.holdF ?? s.endF ?? 0) - (s.holdF ?? s.startF ?? 0)) / FPS * 14
+        ));
 
-    const seg = document.createElement('div');
-    seg.className = 'rail-seg';
-    seg.style.flex = String(Math.max(4, dur));
-    seg.dataset.stateIdx = i;
-    railEl.appendChild(seg);
-    railSegEls.push({ el: seg, stateIdx: i });
+        const seg = document.createElement('div');
+        seg.className = 'rail-seg';
+        seg.style.flex = String(Math.max(4, dur));
+        seg.dataset.stateIdx = i;
+        railEl.appendChild(seg);
+        railSegEls.push({ el: seg, stateIdx: i });
 
-    if (s.type === 'loop' || s.type === 'pause' || s.type === 'play-once') {
-        const dot = document.createElement('div');
-        dot.className = 'rail-dot';
-        dot.title = s.label || '';
-        dot.dataset.stateIdx = i;
+        if (s.type === 'loop' || s.type === 'pause' || s.type === 'play-once') {
+            const dot = document.createElement('div');
+            dot.className = 'rail-dot';
+            dot.title = s.label || '';
+            dot.dataset.stateIdx = i;
 
-        dot.addEventListener('click', () => {
-            if (!allLoaded) return;
-            if (!videoModeActive) {
-                videoSection.scrollIntoView({ behavior: 'instant' });
-                requestAnimationFrame(() => {
-                    waitingForFirstScroll = false;
-                    enterVideoMode();
+            dot.addEventListener('click', () => {
+                if (!allLoaded) return;
+                if (!videoModeActive) {
+                    videoSection.scrollIntoView({ behavior: 'instant' });
+                    requestAnimationFrame(() => {
+                        waitingForFirstScroll = false;
+                        enterVideoMode();
+                        jumpToState(i);
+                    });
+                } else {
                     jumpToState(i);
-                });
-            } else {
-                jumpToState(i);
-            }
-        });
+                }
+            });
 
-        railEl.appendChild(dot);
-        railDotEls.push({ el: dot, stateIdx: i });
+            railEl.appendChild(dot);
+            railDotEls.push({ el: dot, stateIdx: i });
+        }
     }
+    const trail = document.createElement('div');
+    trail.className = 'rail-seg';
+    trail.style.flex = '16';
+    railEl.appendChild(trail);
 }
-const trail = document.createElement('div');
-trail.className = 'rail-seg';
-trail.style.flex = '16';
-railEl.appendChild(trail);
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  STATE
@@ -495,7 +499,7 @@ function rafLoop() {
     if (s.type === 'play-once' && !playOnceDone) return;
     contFill.style.width = (Math.min(1, scrollAccum / s.triggerPx) * 100).toFixed(1) + '%';
 }
-rafLoop();
+if (canvas) rafLoop();
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  SCROLL / INPUT HANDLING
@@ -571,7 +575,7 @@ const videoObserver = new IntersectionObserver((entries) => {
         }
     }
 }, { threshold: 0.45 });
-videoObserver.observe(videoSection);
+if (videoSection) videoObserver.observe(videoSection);
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  HEADER HIDE ON SCROLL (post-video sections)
@@ -809,4 +813,47 @@ if (newsletterForm && newsletterContent && newsletterSuccess) {
         newsletterContent.style.display = 'none';
         newsletterSuccess.style.display = 'flex';
     });
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  BELIEFS SECTION SCROLL ANIMATION
+// ══════════════════════════════════════════════════════════════════════════════
+const beliefItems = document.querySelectorAll('.belief-scroll-item');
+const dynamicWordsContainer = document.getElementById('dynamic-belief-words');
+
+if (beliefItems.length > 0 && dynamicWordsContainer) {
+    window.addEventListener('scroll', () => {
+        if (window.innerWidth <= 1024) return; // Handled by CSS on mobile & tablet
+        
+        const centerY = window.innerHeight / 2;
+        const maxDist = window.innerHeight / 2.5; // Controls the fade spread
+        
+        let activeIndex = 0;
+        let minDistance = Infinity;
+
+        beliefItems.forEach(item => {
+            const rect = item.getBoundingClientRect();
+            // Calculate center of the item relative to viewport
+            const itemCenter = rect.top + rect.height / 2;
+            const dist = Math.abs(centerY - itemCenter);
+            
+            // Calculate opacity: 1 at center, fading out as it gets further
+            let opacity = 1 - (dist / maxDist);
+            if (opacity < 0.2) opacity = 0.2; // Base minimum opacity
+            if (opacity > 1) opacity = 1;
+            
+            item.style.opacity = opacity;
+            
+            // Keep track of the item closest to the center
+            if (dist < minDistance) {
+                minDistance = dist;
+                activeIndex = parseInt(item.getAttribute('data-index') || "0");
+            }
+        });
+
+        // Update the slot machine position
+        // Each word is 60px high
+        dynamicWordsContainer.style.transform = `translateY(-${activeIndex * 60}px)`;
+        
+    }, { passive: true });
 }
