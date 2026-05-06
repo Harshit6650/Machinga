@@ -1070,6 +1070,12 @@ body {
         grid-template-columns: 1fr 1fr;
         gap: 1.5rem;
     }
+    .stat-number {
+        font-size: 2rem;
+    }
+    .stat-label {
+        font-size: 0.85rem;
+    }
 }
 
 /* Beliefs Scroll Animation Responsive */
