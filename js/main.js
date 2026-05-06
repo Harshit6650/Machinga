@@ -857,3 +857,26 @@ if (beliefItems.length > 0 && dynamicWordsContainer) {
         
     }, { passive: true });
 }
+
+// ══════════════════════════════════════════════════════════════════════════════
+//  CARD DETAILS DROPDOWN
+// ══════════════════════════════════════════════════════════════════════════════
+document.querySelectorAll('.toggle-details').forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const targetId = link.getAttribute('data-target');
+        const targetEl = document.getElementById(targetId);
+        
+        if (targetEl) {
+            // Toggle the open class
+            const isOpen = targetEl.classList.toggle('open');
+            
+            // Scroll to the dropdown content smoothly
+            if (isOpen) {
+                setTimeout(() => {
+                    targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300);
+            }
+        }
+    });
+});

@@ -330,11 +330,19 @@
                 object-fit: cover;
                 display: block;
             }
-            .carousel-glass-text {
+            .carousel-text-overlay {
                 position: absolute;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
+                width: 100%;
+                text-align: center;
+                pointer-events: none;
+                z-index: 2;
+                padding: 0 2rem;
+                box-sizing: border-box;
+            }
+            .carousel-glass-text {
                 margin: 0;
                 font-size: clamp(3rem, 8vw, 5rem);
                 font-weight: 800;
@@ -342,9 +350,13 @@
                 letter-spacing: 2px;
                 color: rgba(255, 255, 255, 0.25);
                 text-shadow: 0 10px 40px rgba(0,0,0,0.5);
-                text-align: center;
-                width: 100%;
-                pointer-events: none;
+            }
+            .carousel-subtext {
+                margin: 0.5rem 0 0 0;
+                font-size: clamp(1rem, 1.5vw, 1.2rem);
+                font-weight: 400;
+                color: rgba(255, 255, 255, 0.9);
+                text-shadow: 0 4px 15px rgba(0,0,0,0.8);
             }
             .carousel-nav-btn {
                 position: absolute;
@@ -387,28 +399,31 @@
             </button>
 
             <div id="work-carousel" class="carousel-track" style="display: flex; gap: 2rem; overflow-x: auto; padding: 0 max(2rem, calc(50vw - 570px)) 2rem; scroll-snap-type: x mandatory; scrollbar-width: none;">
-                <!-- Appreciate -->
-                <div class="carousel-item">
-                    <img src="./assets/APPRECIATE1.png" alt="Appreciate">
-                    <h3 class="carousel-glass-text">Appreciate</h3>
-                    <a href="appreciate.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;"></a>
-                </div>
                 <!-- Aava -->
                 <div class="carousel-item">
                     <img src="./assets/AAVA3.png" alt="Aava">
-                    <h3 class="carousel-glass-text">Aava</h3>
+                    <div class="carousel-text-overlay">
+                        <h3 class="carousel-glass-text">Aava</h3>
+                        <p class="carousel-subtext">How two words made a 20-year-old water brand uncopyable</p>
+                    </div>
                     <a href="aava.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;"></a>
                 </div>
                 <!-- Contraband -->
                 <div class="carousel-item">
                     <img src="./assets/CONTRABAND2.png" alt="Contraband">
-                    <h3 class="carousel-glass-text">Contraband</h3>
+                    <div class="carousel-text-overlay">
+                        <h3 class="carousel-glass-text">Contraband</h3>
+                        <p class="carousel-subtext">How a stain launched a luxury fragrance to 88 million people</p>
+                    </div>
                     <a href="contraband.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;"></a>
                 </div>
                 <!-- Hamleys -->
                 <div class="carousel-item">
                     <img src="./assets/HAMLEYS4.png" alt="Hamleys">
-                    <h3 class="carousel-glass-text">Hamleys</h3>
+                    <div class="carousel-text-overlay">
+                        <h3 class="carousel-glass-text">Hamleys</h3>
+                        <p class="carousel-subtext">How a 250-year-old toy store helped Gen Z defuse a time bomb on Valentine's Day</p>
+                    </div>
                     <a href="hamleys.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 3;"></a>
                 </div>
             </div>
