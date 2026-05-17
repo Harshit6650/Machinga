@@ -12,11 +12,12 @@
 
 const isMobileView = window.innerWidth <= 1024;
 const FPS         = 24;
-const FRAME_COUNT = isMobileView ? 981 : 1079;
-const FRAMES_DIR  = isMobileView ? 'pencilbombframesformobile' : 'PencilBombFrames';
+const FRAME_COUNT = isMobileView ? 981 : 538;
+const FRAMES_DIR  = isMobileView ? 'pencilbombframesformobile' : 'PencilBomb22SecVideo';
 
 function t2f(sec) {
-    return Math.max(0, Math.min(FRAME_COUNT - 1, Math.round(sec * FPS) - 1));
+    const timeScale = isMobileView ? 1 : (538 / 1079);
+    return Math.max(0, Math.min(FRAME_COUNT - 1, Math.round((sec * timeScale) * FPS) - 1));
 }
 
 // ── State Machine definition ──────────────────────────────────────────────────
@@ -327,17 +328,8 @@ function startLoop(s) {
     clearPlayback();
     loopCurrentF = s.startF;
     renderFrame(loopCurrentF);
-    
-    // Mobile sequences often have slightly different loop points or lack seamless loops.
-    // Pausing on the first frame of the loop prevents the "continuously playing/jumping" issue.
-    if (isMobileView) return;
-
-    const ms = 1000 / FPS;
-    loopInterval = setInterval(() => {
-        loopCurrentF++;
-        if (loopCurrentF > s.endF) loopCurrentF = s.startF;
-        renderFrame(loopCurrentF);
-    }, ms);
+    // Prevent continuous auto-playing/looping which causes a reverse jump when it restarts.
+    // The frames will now scrub forward as the user scrolls.
 }
 
 function startPlayOnce(s) {
@@ -497,7 +489,16 @@ function rafLoop() {
     const s = STATES[stateIdx];
     if (!s || s.type === 'exit' || s.type === 'transition') return;
     if (s.type === 'play-once' && !playOnceDone) return;
-    contFill.style.width = (Math.min(1, scrollAccum / s.triggerPx) * 100).toFixed(1) + '%';
+    
+    const progress = Math.max(0, Math.min(1, scrollAccum / s.triggerPx));
+    contFill.style.width = (progress * 100).toFixed(1) + '%';
+    
+    if (s.type === 'loop') {
+        const frame = Math.round(s.startF + progress * (s.endF - s.startF));
+        if (frame !== currentDisplayFrame) {
+            renderFrame(frame);
+        }
+    }
 }
 if (canvas) rafLoop();
 
@@ -524,12 +525,13 @@ function handleScrollDelta(dy) {
     // ── BACKWARDS SCROLL
     if (dy < 0) { 
         scrollAccum += dy;
-        // Require a slight threshold (-80px) backwards scroll before triggering rewind
-        if (scrollAccum < -80 && stateIdx >= 2) {
+        // Use a much larger threshold (-250px) before triggering the reverse state
+        // to ensure it's a deliberate backward scroll and not a trackpad bounce when stopping.
+        if (scrollAccum < -250 && stateIdx >= 2) {
             scrollAccum = 0;
             retreatState();
-        } else if (scrollAccum < 0) {
-            scrollAccum = 0; // Cap at 0 if haven't passed the threshold
+        } else if (scrollAccum < -250) {
+            scrollAccum = -250;
         }
         return; 
     }
