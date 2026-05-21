@@ -249,6 +249,7 @@ body {
     transition: height 0.32s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 21;
     pointer-events: none;
+    display: none !important;
 }
 #continue-wrap.visible { height: 32px; }
 
@@ -314,6 +315,7 @@ body {
     height: 2px;
     background: rgba(0,0,0,0.05);
     z-index: 20;
+    display: none !important;
 }
 #progress-bar-fill {
     height: 100%;
@@ -350,10 +352,10 @@ body {
 .loader-content { width: 80%; max-width: 600px; text-align: center; position: relative; z-index: 2; pointer-events: none; }
 .loader-video    { 
     position: absolute; 
-    top: 0; 
+    top: var(--nav-height); 
     left: 0; 
     width: 100%; 
-    height: 100%; 
+    height: calc(100% - var(--nav-height)); 
     object-fit: contain; 
     z-index: 1;
     pointer-events: none;

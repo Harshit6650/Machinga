@@ -20,18 +20,23 @@ function t2f(sec) {
     return Math.max(0, Math.min(FRAME_COUNT - 1, Math.round((sec * timeScale) * FPS) - 1));
 }
 
+function getFrame(f) {
+    const idx = Math.max(0, f - 1);
+    return isMobileView ? Math.min(FRAME_COUNT - 1, Math.round((idx / 537) * (981 - 1))) : Math.min(FRAME_COUNT - 1, idx);
+}
+
+const f1 = getFrame(151);
+const f2 = getFrame(423);
+const f3 = FRAME_COUNT - 1;
+
 // ── State Machine definition ──────────────────────────────────────────────────
 const STATES = [
-    { type: 'transition',startF: t2f(0.0),  endF: t2f(10.5),  fps: Math.round(FPS * 2.4), label: 'Expanding' },
-    { type: 'loop',      startF: t2f(10.5), endF: t2f(13.93), triggerPx: 60, greenPulse: true,  label: 'Think' },
-    { type: 'transition',startF: t2f(13.93),endF: t2f(17.0),  fps: Math.round(FPS * 2.4), label: '' },
-    { type: 'loop',      startF: t2f(17.0), endF: t2f(19.30), triggerPx: 60, greenPulse: true,  label: 'Make' },
-    { type: 'transition',startF: t2f(19.30),endF: t2f(24.88), fps: Math.round(FPS * 2.4), label: '' },
-    { type: 'loop',      startF: t2f(24.88),endF: t2f(26.93), triggerPx: 60, greenPulse: true,  label: 'Run' },
-    { type: 'transition',startF: t2f(26.93),endF: t2f(29.5),  fps: Math.round(FPS * 2.4), label: '' },
-    { type: 'pause',     holdF:  t2f(30.0), triggerPx: 80,    greenPulse: false, label: 'Think · Make · Run' },
-    { type: 'transition',startF: t2f(30.0), endF: t2f(43.0),  fps: Math.round(FPS * 2.4), label: 'The Machinga Method' },
-    { type: 'pause',     holdF:  t2f(43.0), triggerPx: 80,    greenPulse: false, label: 'The Machinga Method' },
+    { type: 'transition',startF: 0,   endF: f1,  fps: Math.round(FPS * 3.5), label: 'Expanding' },
+    { type: 'pause',     holdF:  f1,  triggerPx: 80,    greenPulse: true,  label: 'Think · Make · Run' },
+    { type: 'transition',startF: f1,  endF: f2,  fps: Math.round(FPS * 2.4), label: '' },
+    { type: 'pause',     holdF:  f2,  triggerPx: 80,    greenPulse: true,  label: 'Think · Make · Run' },
+    { type: 'transition',startF: f2,  endF: f3,  fps: Math.round(FPS * 2.4), label: '' },
+    { type: 'pause',     holdF:  f3,  triggerPx: 80,    greenPulse: true,  label: 'The Machinga Method' },
     { type: 'exit' },
 ];
 
@@ -386,6 +391,37 @@ function advanceState() {
 }
 
 function retreatState() {
+    if (stateIdx === 1) {
+        const transState = STATES[0];
+        isReversing = true;
+        clearPlayback();
+        contWrap.classList.remove('visible');
+        
+        transCurrentF = transState.endF;
+        renderFrame(transCurrentF);
+        
+        const ms = 1000 / (transState.fps * 2);
+        transInterval = setInterval(() => {
+            transCurrentF--;
+            renderFrame(transCurrentF);
+            if (transCurrentF <= transState.startF) {
+                clearInterval(transInterval);
+                transInterval = null;
+                isReversing = false;
+                
+                videoModeActive = false;
+                waitingForFirstScroll = true;
+                document.body.style.overflow = '';
+                
+                window.scrollTo({ top: Math.max(0, videoSection.offsetTop - 150), behavior: 'smooth' });
+                
+                stateIdx = 0;
+                showScrollToBegin();
+            }
+        }, ms);
+        return;
+    }
+
     const prevIdx = stateIdx - 2;
     if (prevIdx < 0) return; // Cannot go back further than 0
 
@@ -402,7 +438,7 @@ function retreatState() {
     transCurrentF = transState.endF;
     renderFrame(transCurrentF);
     
-    const ms = 1000 / (transState.fps || FPS);
+    const ms = 1000 / (transState.fps * 1.5);
     transInterval = setInterval(() => {
         transCurrentF--; // Play backwards
         renderFrame(transCurrentF);
@@ -527,7 +563,7 @@ function handleScrollDelta(dy) {
         scrollAccum += dy;
         // Use a much larger threshold (-250px) before triggering the reverse state
         // to ensure it's a deliberate backward scroll and not a trackpad bounce when stopping.
-        if (scrollAccum < -250 && stateIdx >= 2) {
+        if (scrollAccum < -250 && stateIdx >= 1) {
             scrollAccum = 0;
             retreatState();
         } else if (scrollAccum < -250) {
