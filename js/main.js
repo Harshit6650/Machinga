@@ -12,31 +12,19 @@
 
 const isMobileView = window.innerWidth <= 1024;
 const FPS         = 24;
-const FRAME_COUNT = isMobileView ? 981 : 538;
-const FRAMES_DIR  = isMobileView ? 'pencilbombframesformobile' : 'PencilBomb22SecVideo';
+const FRAME_COUNT = isMobileView ? 981 : 240;
+const FRAMES_DIR  = isMobileView ? 'pencilbombframesformobile' : 'Pencilbombdesktopnewframes';
 
-function t2f(sec) {
-    const timeScale = isMobileView ? 1 : (538 / 1079);
-    return Math.max(0, Math.min(FRAME_COUNT - 1, Math.round((sec * timeScale) * FPS) - 1));
-}
-
-function getFrame(f) {
-    const idx = Math.max(0, f - 1);
-    return isMobileView ? Math.min(FRAME_COUNT - 1, Math.round((idx / 537) * (981 - 1))) : Math.min(FRAME_COUNT - 1, idx);
-}
-
-const f1 = getFrame(151);
-const f2 = getFrame(423);
-const f3 = FRAME_COUNT - 1;
+const f1 = Math.floor(FRAME_COUNT / 2);
+const f2 = FRAME_COUNT - 1;
 
 // ── State Machine definition ──────────────────────────────────────────────────
 const STATES = [
-    { type: 'transition',startF: 0,   endF: f1,  fps: Math.round(FPS * 3.5), label: 'Expanding' },
+    { type: 'pause',     holdF:  0,   triggerPx: 80,    greenPulse: false, label: 'Expanding' },
+    { type: 'transition',startF: 0,   endF: f1,  fps: Math.round(FPS * 3.5), label: '' },
     { type: 'pause',     holdF:  f1,  triggerPx: 80,    greenPulse: true,  label: 'Think · Make · Run' },
     { type: 'transition',startF: f1,  endF: f2,  fps: Math.round(FPS * 2.4), label: '' },
-    { type: 'pause',     holdF:  f2,  triggerPx: 80,    greenPulse: true,  label: 'Think · Make · Run' },
-    { type: 'transition',startF: f2,  endF: f3,  fps: Math.round(FPS * 2.4), label: '' },
-    { type: 'pause',     holdF:  f3,  triggerPx: 80,    greenPulse: true,  label: 'The Machinga Method' },
+    { type: 'pause',     holdF:  f2,  triggerPx: 80,    greenPulse: true,  label: 'The Machinga Method' },
     { type: 'exit' },
 ];
 
@@ -299,9 +287,15 @@ function showScrollToBegin() {
     contFill.style.width = '0%';
     contWrap.classList.add('visible');
 
-    // Rail dots: none active yet
-    railDotEls.forEach(({ el }) => { el.classList.remove('active', 'done'); });
-    railSegEls.forEach(({ el }) => { el.classList.remove('done', 'current'); });
+    // Rail dots: make first dot active
+    railDotEls.forEach(({ el, stateIdx: si }) => {
+        el.classList.toggle('active', si === 0);
+        el.classList.toggle('done',   false);
+    });
+    railSegEls.forEach(({ el, stateIdx: si }) => {
+        el.classList.toggle('done',    false);
+        el.classList.toggle('current', si === 0);
+    });
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
@@ -391,8 +385,8 @@ function advanceState() {
 }
 
 function retreatState() {
-    if (stateIdx === 1) {
-        const transState = STATES[0];
+    if (stateIdx === 2) {
+        const transState = STATES[1];
         isReversing = true;
         clearPlayback();
         contWrap.classList.remove('visible');
@@ -549,8 +543,8 @@ function handleScrollDelta(dy) {
     if (waitingForFirstScroll) {
         if (dy <= 0) return;            // ignore reverse scroll before start
         waitingForFirstScroll = false;
-        stateIdx = 0;
-        loadState(0);                   // NOW start play-once + activate dot
+        stateIdx = 1;                   // Start transition from 0 to f1 (State 1)
+        loadState(1);
         return;
     }
 
