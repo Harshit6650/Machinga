@@ -15,16 +15,16 @@ const FPS         = 24;
 const FRAME_COUNT = isMobileView ? 981 : 240;
 const FRAMES_DIR  = isMobileView ? 'pencilbombframesformobile' : 'Pencilbombdesktopnewframes';
 
-const f1 = Math.floor(FRAME_COUNT / 2);
-const f2 = FRAME_COUNT - 1;
+const f1_center = isMobileView ? Math.round((89 / 239) * (981 - 1)) : 89;
+const f1_start  = isMobileView ? Math.round((69 / 239) * (981 - 1)) : 69;
+const f1_end    = isMobileView ? Math.round((109 / 239) * (981 - 1)) : 109;
+const f2        = FRAME_COUNT - 1;
 
 // ── State Machine definition ──────────────────────────────────────────────────
 const STATES = [
-    { type: 'pause',     holdF:  0,   triggerPx: 80,    greenPulse: false, label: 'Expanding' },
-    { type: 'transition',startF: 0,   endF: f1,  fps: Math.round(FPS * 3.5), label: '' },
-    { type: 'pause',     holdF:  f1,  triggerPx: 80,    greenPulse: true,  label: 'Think · Make · Run' },
-    { type: 'transition',startF: f1,  endF: f2,  fps: Math.round(FPS * 2.4), label: '' },
-    { type: 'pause',     holdF:  f2,  triggerPx: 80,    greenPulse: true,  label: 'The Machinga Method' },
+    { type: 'transition',startF: 0,   endF: f1_center, fps: Math.round(FPS * 3.5), label: '' },
+    { type: 'loop',      startF: f1_start, endF: f1_end, fps: FPS, triggerPx: 80, greenPulse: true,  label: 'Think · Make · Run' },
+    { type: 'transition',startF: f1_end,   endF: f2,  fps: Math.round(FPS * 2.4), label: '' },
     { type: 'exit' },
 ];
 
@@ -67,9 +67,8 @@ function startImagePreload() {
             // Calculate progress (visual only)
             setLoaderProgress((loadedCount / FRAME_COUNT) * 100);
             
-            // Safety: As soon as the first 75 frames are loaded safely, unlock the screen
-            // so the user isn't stuck waiting for 1079 requests on basic networks.
-            if (!allLoaded && loadedCount >= 75 && images[0] && images[0].complete) {
+            const minFrames = isMobileView ? 75 : FRAME_COUNT;
+            if (!allLoaded && loadedCount >= minFrames && images[0] && images[0].complete) {
                 onAllLoaded();
             } else if (!allLoaded && loadedCount === FRAME_COUNT) {
                  // Failsafe if we somehow reach the end
@@ -269,6 +268,7 @@ let loopInterval   = null;
 let loopCurrentF   = 0;
 let transCurrentF  = 0;
 let isReversing    = false;   // ← NEW: flag to block input while reversing
+let loopCooldownActive = false;
 
 // ══════════════════════════════════════════════════════════════════════════════
 //  PRE-ENTRY: show the section locked, prompt user to scroll
@@ -287,14 +287,12 @@ function showScrollToBegin() {
     contFill.style.width = '0%';
     contWrap.classList.add('visible');
 
-    // Rail dots: make first dot active
-    railDotEls.forEach(({ el, stateIdx: si }) => {
-        el.classList.toggle('active', si === 0);
-        el.classList.toggle('done',   false);
+    // Rail dots: make the single dot inactive initially
+    railDotEls.forEach(({ el }) => {
+        el.classList.remove('active', 'done');
     });
-    railSegEls.forEach(({ el, stateIdx: si }) => {
-        el.classList.toggle('done',    false);
-        el.classList.toggle('current', si === 0);
+    railSegEls.forEach(({ el }) => {
+        el.classList.remove('done', 'current');
     });
 }
 
@@ -325,10 +323,29 @@ function startTransition(s) {
 
 function startLoop(s) {
     clearPlayback();
-    loopCurrentF = s.startF;
+    loopCurrentF = currentDisplayFrame;
+    console.log("startLoop initialized loopCurrentF to:", loopCurrentF, "range:", s.startF, "-", s.endF);
     renderFrame(loopCurrentF);
-    // Prevent continuous auto-playing/looping which causes a reverse jump when it restarts.
-    // The frames will now scrub forward as the user scrolls.
+    
+    const ms = 1000 / (s.fps || FPS);
+    let goingForward = true;
+    
+    loopInterval = setInterval(() => {
+        if (goingForward) {
+            loopCurrentF++;
+            if (loopCurrentF >= s.endF) {
+                goingForward = false;
+                console.log("Loop reached endF, reversing direction");
+            }
+        } else {
+            loopCurrentF--;
+            if (loopCurrentF <= s.startF) {
+                goingForward = true;
+                console.log("Loop reached startF, going forward");
+            }
+        }
+        renderFrame(loopCurrentF);
+    }, ms);
 }
 
 function startPlayOnce(s) {
@@ -360,10 +377,31 @@ function loadState(idx) {
     playOnceDone = false;
     isReversing  = false;
     clearPlayback();
+
+    console.log("loadState idx:", idx, "state:", s ? s.type : "none");
+
+    // Dynamically set startF of a transition to the current display frame if it follows a loop!
+    if (s.type === 'transition') {
+        if (s.originalStartF === undefined) {
+            s.originalStartF = s.startF;
+        }
+        s.startF = currentDisplayFrame;
+        console.log("Transition dynamic startF set to:", s.startF);
+    }
+
+    if (idx === 1) { // Entering loop state
+        loopCooldownActive = true;
+        console.log("Loop cooldown activated (800ms)");
+        setTimeout(() => {
+            loopCooldownActive = false;
+            console.log("Loop cooldown deactivated");
+        }, 800);
+    }
+
     updateUI(idx);
 
     if      (s.type === 'play-once')   startPlayOnce(s);
-    else if (s.type === 'loop')        startLoop(s);
+    else if (s.type === 'loop')        { console.log("Calling startLoop..."); startLoop(s); }
     else if (s.type === 'transition')  startTransition(s);
     else if (s.type === 'pause') {
         renderFrame(s.holdF);
@@ -385,20 +423,20 @@ function advanceState() {
 }
 
 function retreatState() {
-    if (stateIdx === 2) {
-        const transState = STATES[1];
+    if (stateIdx === 1) { // Rewind from loop (state 1) back to 0
+        const transState = STATES[0]; // transition 0 -> f1_center
         isReversing = true;
         clearPlayback();
         contWrap.classList.remove('visible');
         
-        transCurrentF = transState.endF;
+        transCurrentF = currentDisplayFrame; // Starts at whatever loop frame is currently showing
         renderFrame(transCurrentF);
         
         const ms = 1000 / (transState.fps * 2);
         transInterval = setInterval(() => {
             transCurrentF--;
             renderFrame(transCurrentF);
-            if (transCurrentF <= transState.startF) {
+            if (transCurrentF <= (transState.originalStartF ?? transState.startF)) {
                 clearInterval(transInterval);
                 transInterval = null;
                 isReversing = false;
@@ -415,34 +453,6 @@ function retreatState() {
         }, ms);
         return;
     }
-
-    const prevIdx = stateIdx - 2;
-    if (prevIdx < 0) return; // Cannot go back further than 0
-
-    const transState = STATES[stateIdx - 1]; // The transition linking the previous state to the current one
-    stateIdx = prevIdx; // Target the previous interactive state
-    isReversing = true; // Block inputs during rewind
-
-    clearPlayback();
-    updateUI(stateIdx); // Pre-update UI to show we are going backward
-    
-    // Hide continue prompt temporarily
-    contWrap.classList.remove('visible');
-
-    transCurrentF = transState.endF;
-    renderFrame(transCurrentF);
-    
-    const ms = 1000 / (transState.fps * 1.5);
-    transInterval = setInterval(() => {
-        transCurrentF--; // Play backwards
-        renderFrame(transCurrentF);
-        if (transCurrentF <= transState.startF) {
-            clearInterval(transInterval);
-            transInterval = null;
-            isReversing = false;
-            loadState(stateIdx);
-        }
-    }, ms);
 }
 
 function enterVideoMode(fromBottom = false) {
@@ -457,8 +467,7 @@ function enterVideoMode(fromBottom = false) {
         document.body.style.overflow = 'hidden';
         videoSection.scrollIntoView({ behavior: 'instant' });
 
-        // Target the last valid interactive state before exit (the final pause or loop)
-        stateIdx = STATES.length - 2;
+        stateIdx = 1; // Target the loop state (only interactive state)
         loadState(stateIdx);
     } else {
         showScrollToBegin();
@@ -538,13 +547,14 @@ if (canvas) rafLoop();
 function handleScrollDelta(dy) {
     if (!videoModeActive) return;
     if (isReversing) return;
+    if (loopCooldownActive) return;
 
     // ── FIRST SCROLL: start the animation ────────────────────────────────────
     if (waitingForFirstScroll) {
         if (dy <= 0) return;            // ignore reverse scroll before start
         waitingForFirstScroll = false;
-        stateIdx = 1;                   // Start transition from 0 to f1 (State 1)
-        loadState(1);
+        stateIdx = 0;                   // Start transition from 0 to f1_start (State 0)
+        loadState(0);
         return;
     }
 
